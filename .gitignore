@@ -1,0 +1,7 @@
+*~
+*.c
+.*
+*.pyc
+*.tar.gz
+*.log
+!.gitignore

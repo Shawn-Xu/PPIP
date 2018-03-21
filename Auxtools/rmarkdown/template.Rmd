@@ -1,0 +1,318 @@
+---
+title: "PPIP 1.0 html report"
+date: "`r Sys.Date()`"
+output: 
+  prettydoc::html_pretty:
+    toc: true
+    theme: @{theme}
+    highlight: github
+vignette: >
+  %\VignetteIndexEntry{00 proteoQC introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\usepackage[utf8]{inputenc}
+params:
+  kobas: @{kobas}
+  sma3s: @{sma3s}
+---
+
+<style>
+
+.main-content table {
+	word-break: break-all;
+}
+</style>
+
+```{r include=FALSE}
+require(data.table)
+require(ggplot2)
+require(plotly)
+require(kableExtra)
+```
+# Introduction
+
+This report is designed to facilitate summarization and rapid browsing of complex results in PIPP pipelines.
+
+# 1 QC
+
+Quality control (QC) are necessary to facilitate successful genomics and proteomics analyses. This procedure will check the produced data to decide whether these are reliable enough to be used, and help to improve the arguments of tools in the Pipeline.
+
+## 1.1 Quality control of NGS data
+
+@{ngsqc}
+
+## 1.2 Peptide-level qvalue distribution
+
+This plot depicts the Q-value distribution of all PSMs (peptide spectrum match). In this pipeline, we used the Q-value <= 0.01 to find the truly significant results. The blue area is the density distribution of all Q-values. And the green curve represents the related empirical cumulative distribution of all Q-value.
+
+```{r fig.width=5, fig.height=3.5, fig.align='center', echo=FALSE,warning=FALSE, message=FALSE,results='hide'}
+cleanPep<-function(x)
+{
+	x<-sub("^[\\w-]\\.(.+)\\.[\\w-]$","\\1", x, perl = TRUE)
+	x<-gsub("[\\+\\.\\d]","",x,perl = TRUE)
+	return(x)
+}
+d<-fread("@{raw}",sep="\t")
+ggplot(d, aes(PepQValue)) +  
+	geom_density(aes(y=..scaled..),stat="density", alpha=I(0.2), fill="blue",color="royalblue4") +
+	stat_ecdf(geom = "step",col="chartreuse4")+
+	theme_bw() +
+	geom_vline(xintercept =0.01 ,colour="red", linetype ="longdash")+
+	annotate("text", label = "0.01", x = 0.05, y = 0,  colour = "red") +
+	xlab("Peptide-level qvalue") + 
+	ylab("Probability")
+```
+
+## 1.3 Precursor error distribution
+
+This graph displays a precursor mass error distribution in MS-level. As shown in the figure, the blue curve represents the distribution of all the unfiltered PSMs. And the red curve indicates the trace of PSMs satisfied with statistical criteria.
+
+```{r echo=FALSE,warning=FALSE , message=FALSE}
+#ppm 分布，raw
+setnames(d,"PrecursorError(ppm)","ppm")
+x <- d$ppm
+fit <- density(x)
+
+fd<-subset(d,PepQValue<=0.01,)
+fx<-fd$ppm
+ffit <- density(fx)
+
+htmltools::div(plot_ly(x = x) %>% 
+	#add_histogram() %>% 
+	add_lines(x = fit$x, y = fit$y*length(x), fill = "tozeroy", yaxis = "y2",name="All") %>% 
+	add_lines(x = ffit$x, y = ffit$y*length(fx), fill = "red", yaxis = "y2",name="Pvalue<=0.01") %>% 
+	layout(yaxis2 = list(overlaying = "y", side = "right"),xaxis=list(title="Precursor error (PPM)")), align = "center")
+```
+
+# 2 Basic result
+
+The main purpose of this chapter is to describe the basic statistical analysis of polypeptides.
+
+## 2.1 Identified polypeptide length distribution
+
+Amino acid length distribution of the polypeptides.
+
+```{r fig.width=7, fig.height=4, fig.align='center',echo=FALSE,warning=FALSE , message=FALSE}
+#pep length 分布，clean
+fd<-fread("@{pep}",sep="\t")
+fd[,Length:=nchar(Peptide),.(Peptide)]
+
+x <- fd$Length
+fit <- density(x)
+htmltools::div(plot_ly(x = x) %>%
+	add_histogram() %>%
+	add_lines(x = fit$x, y = fit$y*length(x), fill = "tozeroy", yaxis = "y2") %>%
+	layout(yaxis2 = list(overlaying = "y", side = "right"),xaxis=list(title="Peptide length"),yaxis = list(title = "Density")), align = "center")
+```
+
+## 2.2 Spectral count of identified polypeptide
+
+Spectral count, defined as the total number of spectra identified for a peptide, has gained acceptance as a practical in proteomic studies. As a supplement to Q-value, the more count a peptide has, the more credible the peptide is.
+
+```{r echo=FALSE,warning=FALSE , message=FALSE}
+cfd<-as.data.table(table(fd$SpecCount))
+colnames(cfd)<-c("SpecCount","Number")
+cfd$SpecCount=factor(cfd$SpecCount,levels=cfd$SpecCount,order=TRUE)
+p <- plot_ly(cfd, x = cfd$SpecCount, y = cfd$Number, type = 'bar',
+        marker = list(color = 'rgb(158,202,225)',
+                      line = list(color = 'rgb(8,48,107)',
+                                  width = 1.5))) %>%
+  layout(title = "Spectral count of peptides",
+         xaxis = list(title = "Spectral count in one peptide"),
+         yaxis = list(title = "Number"))
+p
+```
+
+## 2.3 Amino acid distribution of C-/N-term
+
+To view the amino acid number distribution of N-terminus and C-terminus, we depict a barplot as follows: 
+
+```{r echo=FALSE,warning=FALSE , message=FALSE}
+#N C term，clean
+sfd <- fd[,.(Cterm=substr(Biostrings::reverse(Peptide), 1, 1),  Nterm=substr(Peptide, 1, 1))  ,.(Peptide)]
+ct<-sfd[,.(CCount=.N),.(Cterm)]
+nt<-sfd[,.(NCount=.N),.(Nterm)]
+setnames(nt,1,"AA")
+setnames(ct,1,"AA")
+setkey(nt,AA)
+setkey(ct,AA)
+mdc<-merge(ct,nt,all=TRUE)
+p<-plot_ly(mdc, x = ~AA, y = ~CCount, type = 'bar', name = 'C-term') %>%
+	add_trace(y = ~NCount, name = 'N-term') %>%
+	layout(yaxis = list(title = 'Count'), 
+			barmode = 'group',
+			xaxis=list(title="Amino acid"))
+htmltools::div(p,align = "center")
+
+```
+
+## 2.4 Cysteine distribution of polypeptides
+
+During the maturation process of proteins in eukaryote, cysteine residues are oxidised and form disulfide bridges, which are important to maintain protein shapes. Through this shape, disulfide bonds play en essential role for the stability and the activity of proteins. The following graph use an pie to describe how many cysteine residues in each polypeptide.
+
+```{r echo=FALSE,warning=FALSE , message=FALSE}
+#cys，clean
+cys<-fd[,.(CysCount=lengths(regmatches(Peptide, gregexpr("C", Peptide)))),.(Peptide)]
+cysc<-as.data.table(table(cys$CysCount))
+colnames(cysc)<-c("CysCount","Number")
+cysc$CysCount= paste0("CysNum=",cysc$CysCount)
+cysc$CysCount=factor(cysc$CysCount,levels=cysc$CysCount,order=TRUE)
+
+p <- plot_ly(cysc, 
+			 labels = ~CysCount, 
+			 values = ~Number, 
+			 textinfo = 'label+percent',
+			 type = 'pie') %>%
+	layout(title = 'Cysteine distribution in one peptide',
+         xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+         yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+p
+```
+
+## 2.5 Summary table of polypeptides
+
+This table includes the peptide identification result that could be used for further analysis.
+
+```{r echo=FALSE, rownames.print=FALSE,warning=FALSE , message=FALSE}
+d<-read.delim("@{pep}",header=T,stringsAsFactors=F)
+setDT(d)
+d[,Protein:=gsub(";","<br>", Protein),.(Peptide)]
+d[,PepQValue:=gsub(";","<br>",PepQValue),.(Peptide)]
+knitr::kable(d, "html",escape=F) %>% 
+	kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),full_width = F)  %>%
+	scroll_box(height = "30em")
+```
+
+[Download the peptide summary](@{pep})
+
+Furthermore, you can get more detailed PSM (peptide-spectrum match) information from the link below:
+
+[Download the PSM summary](@{psm})
+
+# 3 Annotation {#anno}
+
+This chapter aims to explore the sequence motifs and potential function of the polypeptides via serveral different tools.
+
+## 3.1 MSA
+
+Multiple Sequence Alignment (MSA) is generally the alignment of three or more biological sequences (protein or nucleic acid) with similar length. From the output, homology can be inferred and the evolutionary relationships between the sequences cand be studied.
+
+[Click here to the multiple sequence alignment viewer](@{msa})
+
+<!-- #iframe src="./annotation/msa.html" width="50%" style="border: 1;"></iframe> -->
+
+## 3.2 SignalP
+
+The secretory signal peptide is a ubiquitous proteinsorting signal that targets its passenger protein for translocation across the endoplasmic reticulum membrane in eukaryotes and the cytoplasmic membrane in prokaryotes. In this section, the signalP 4.1 server, which is designed to discriminate between signal peptides and transmembrane regions, is utilized for predicting the presence and location of signal peptide cleavage sites in amino acid sequences from different organisms.
+
+```{r echo=FALSE, rownames.print=FALSE,warning=FALSE , message=FALSE}
+d<-fread("@{sgp}")
+d %>% 
+	dplyr::mutate_if(is.numeric, function(x) {
+    	cell_spec(x, "html", bold = T, color = spec_color(x, end = 0.9),
+              font_size = spec_font_size(x))
+  		}) %>%
+	dplyr::mutate(isSignal = cell_spec(
+			isSignal, "html", color = "white", bold = T,
+			background = ifelse(isSignal == "Y", "#99CC33", "#993333")
+	  	)) %>% 
+	select(ID, D, isSignal, Dmaxcut, 'Networks-used', Cmax, Ymax, Smax) %>%
+		knitr::kable("html", escape = F) %>%
+		kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),full_width = F) %>% 
+		scroll_box(height = "20em")
+```
+
+`r if(!params$kobas) {"\\begin{comment}"}`
+
+## 3.3 Functional annotation
+
+Gene ontology (GO) is one the fundamental functional classification system. In this sub-section, it was applied to annotate the polypeptides and illustrated as a treemap below:
+
+```{r echo=FALSE, rownames.print=FALSE,warning=FALSE , message=FALSE, eval=@{kobas_code}}
+library(treemapify) 
+library(ggthemes)
+d<-fread("@{go}")
+do=d[order(-IDCount)]
+do[,Desc:=unlist(strsplit(GO,"~"))[2],.(GO)]
+ggplot(do,aes(area=IDCount,fill=Desc,label=paste0(Desc,"\n(",IDCount,")")))+
+	geom_treemap()+
+	geom_treemap_text(place='centre')+
+	theme_stata()+
+	theme(legend.position="none")
+```
+
+[Download the gene ontology summary](@{go})
+
+A biological pathway is a series of interactions among molecules in a cell that leads to a certain product or a change in a cell. Such a pathway can trigger the assembly of new molecules, such as a fat or protein. Pathways can also turn genes on and off, or spur a cell to move. 
+In the table below, all of the items with availbale pathway annotation were listed.
+
+```{r echo=FALSE, rownames.print=FALSE,warning=FALSE, message=FALSE, eval=@{kobas_code}}
+d<-fread("@{ko}")
+linelimit <- ifelse(dim(d)[1]>=10, 10, dim(d)[1])
+
+setDT(d)
+d[,GeneName:=gsub(", ","<br>", GeneName),.(ID)]
+
+d %>% 
+	dplyr::mutate(Hyperlink = cell_spec(
+			Hyperlink, "html", color = "white",
+			background = spec_color(1:linelimit, end = 0.9, option = "A", direction = -1)
+	  	)) %>% 
+		knitr::kable("html", escape = F) %>%
+		kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),full_width = F) %>% 
+		scroll_box(height = "20em")
+```
+
+[Download the pathway summary](@{ko})
+
+`r if(!params$kobas) {"\\end{comment}"}`
+
+`r if(!params$sma3s) {"\\begin{comment}"}`
+
+## 3.3 Functional annotation
+
+Gene ontology (GO) is one the fundamental functional classification system. In this sub-section, Sma3s was applied to annotate the peptides and the GO statistical chart was illustrated as three treemaps:
+
+```{r echo=FALSE, rownames.print=FALSE,warning=FALSE , message=FALSE, eval=@{sma3s_code}}
+library(treemapify)
+library(ggthemes)
+
+read.summary <- function(inFile, chunkId, ...){
+	temp <- readLines(inFile)
+	temp.loc <- grep("#", temp)
+	temp.loc <- c(temp.loc, length(temp)+1)
+	temp.target <- grep(chunkId, temp)
+	index<-match(temp.target,temp.loc)
+	start<-temp.target
+	end<-temp.loc[index+1]
+	read.table(text=temp[seq(from = start+1, to = end-2)],sep="\t")
+}
+
+plot_treemap<- function(inFile, chunkId, title)
+{
+	d<-read.summary(inFile,chunkId)
+	colnames(d)<-c("ID","Desc","Count")
+	ggplot(d,aes(area=Count,fill=Desc,label=paste0(Desc,"\n(",Count,")")))+
+	geom_treemap()+
+	geom_treemap_text(place='centre')+
+	theme_stata()+
+	theme(legend.position="none",title=element_text(size = rel(1.2),face = "bold"))+ggtitle(title)
+}
+
+#sumfile<-list.files("./",pattern="_summary.tsv$")
+sumfile<-"@{sma3s_summary}"
+
+chunkId<-'#Category "Cellular component"'
+plot_treemap(sumfile,chunkId,"Cellular component")
+
+chunkId<-'#Category "Molecular function"'
+plot_treemap(sumfile,chunkId,"Molecular function")
+
+chunkId<-'Category "Biological process"'
+plot_treemap(sumfile,chunkId,"Biological process")
+```
+
+[Download the detailed Sma3s annotation file](@{sma3s_tab})
+
+`r if(!params$sma3s) {"\\end{comment}"}`
+
+@{blast}
