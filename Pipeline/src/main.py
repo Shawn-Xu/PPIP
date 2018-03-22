@@ -64,7 +64,7 @@ def run_pipeline(args,parser):
         tmpinfo="\nPlease complete the following preparations manually before the pipeline start:\n"+ \
                 "    1) Copy NGS data (*fq.gz) to the <%s>;\n"+\
                 "    2) Copy mass spectra data to the <%s>;\n"+\
-                "    3) Modify the MS-GF+ modification file in the <%s> (If needed);\n" +\
+                "    3) Modify the MS-GF+ modification file in the <%s> (If necessary);\n" +\
                 "    4) Copy known protein sequence (e.g. NR, RefSeq, Uniprot) to the <%s> (Recommend).\n" +\
                 "    5) Download the uniref90.annot.gz and uniref90.fasta.gz to the <%s> from www.bioinfocabd.upo.es/sma3s/db (Required if the annotation tool is configured to use Sma3s).\n"
         logger.info(tmpinfo % (structure[0],structure[1],structure[2], structure[3], structure[4]) )

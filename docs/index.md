@@ -17,9 +17,11 @@ The **PIPP** is a pipeline made up of multiple steps for polypeptide analysis. I
 
 Also, you must enable Intel VT-x and AMD-V in your BIOS. Many people will already have Intel VT-x and AMD-V enabled though, so try to install **PIPP** first before worrying about this requirement. If necessary though, see the following for detailed instructions:
 
-http://www.howtogeek.com/213795/how-to-enable-intel-vt-x-in-your-computers-bios-or-uefi-firmware/
+[How to Enable Intel VT-x in Your Computer’s BIOS or UEFI Firmware](http://www.howtogeek.com/213795/how-to-enable-intel-vt-x-in-your-computers-bios-or-uefi-firmware/)
 
-If you are going to run this image in Windows system, it requires Microsoft Windows 10 Professional or Enterprise 64-bit. More detail could be found in 'https://docs.docker.com/docker-for-windows/install/'.
+If you are going to run this image in Windows system, it requires Microsoft Windows 10 Professional or Enterprise 64-bit. More detail could be found in :
+
+[Install Docker for Windows](https://docs.docker.com/docker-for-windows/install/)
 
 ***
 
@@ -27,19 +29,23 @@ If you are going to run this image in Windows system, it requires Microsoft Wind
 
 ### 3.1  Build the docker image by yourself
 
-Download this GitHub repository. If you have not already, first download and decompress either the zip:
+If you want to build the PIPP image by yourself, you need to clone the GitHub repository with following command at first. 
 
-https://github.com/XXX/XXX/zipball/master
+```sh
+$ git clone git@github.com:Shawn-Xu/PPIP.git
+```
 
-And rename it **PIPP**. Then enter the **PIPP** folder and type the following commands to build the images.
+Then enter the **PIPP** folder and type the following commands to build the images.
 
 ```sh
 $ docker build --no-cache --rm -t shawndp/pipp .
 ```
 
-### 3.1  Pull image from Docker Hub (highly recommend)
+However, for simplicity, we do not recommend building docker images from scratch.
 
-Alternatively, a more easy and convienent way to get the image is pull it from the Docker Hub with following command. 
+### 3.2  Pull the image from Docker Hub (highly recommend)
+
+As mentioned before, a more easy and convienent way to get the image is pull it from the Docker Hub with following command. 
 
 ```sh
 $ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -49,7 +55,7 @@ $ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 ## 4 Running PIPP
 
-Prior to the formal process, it is necessary to create a new directory as the workspace at first. 
+Before the process begins, it is necessary to create a new directory as a workspace at first. 
 
 ```sh
 $ pw='pipp_workspace'
@@ -78,21 +84,21 @@ After that, we can list the contents of directories in a tree-like format with a
 
 ```sh
 $ tree ${pw}
-├── config                          # cofiguration
+├── config                          # cofiguration folder
 │   ├── blastdb                    # the folder for deploying BLAST database (e.g. NCBI NR, Uniprot).
 │   ├── fastq                      # the folder of RNA-seq fastq files used for denovo.
 │   ├── msraw                      # the folder of MS2 files for 'msalign' step.
-│   └── par                        # parameters
+│   └── par                        # parameters folder
 │        └── MSGFPlus_Mods.txt     # the MS-GF+ configuration for modification.
 ├── out                             # the folder of final result
 └── work                            # the scratch directory for working
 ```
 
-Before the formal pipeline begins, we need to prepare the raw data or configuration files according to the following items:
+Before the software start to run, we need to prepare the raw data or configuration files according to the following items:
 
 - a) Copy NGS data (*fq.gz) to the <config/fastq>;
 - b) Copy mass spectra data to the <config/msraw>;
-- c) Modify the MS-GF+ modification file in the <config/par> (If needed);
+- c) Modify the MS-GF+ modification file in the <config/par> (If necessary);
 - d) Copy known protein sequence (e.g. NR, RefSeq, Uniprot) to the <config/blastdb> (Recommend).
 - e) Download the uniref90.annot.gz and uniref90.fasta.gz to the <config/sma3sdb> from www.bioinfocabd.upo.es/sma3s/db (Required if the annotation tool is configured to use Sma3s).
 
@@ -118,7 +124,7 @@ $ tree ${pw}
 └── work
 ```
 
-And the other specific configuration example that annotation tool is set as **Sma3s**:
+And another configuration example where the annotation tool is set to **Sma3s**:
 
 ```sh
 $ tree ${pw}
@@ -169,17 +175,17 @@ $ docker exec pipp pipe msalign --input work/trinity/Trinity.fasta --sample ${sa
 
 The corresponding result will be stored in the **<work/msalign/>** folder.
 
-Moreover, if there are some collected pubic polypeptide sequences, you can skip step ***rnaqc** and **denovo**, and just start from the step **msalign** with the options *--input*. For example,
+Moreover, if you had some polypeptide sequences collected from pubic sources, you can skip the step ***rnaqc** and **denovo**, and just start from the step **msalign** with the options *--input*. For example,
 
 ```sh
 $ docker exec pipp pipe msalign --input config/customized.fasta  --sample ${sample} --spectrum config/msraw/demo.mgf --threads 8
 ```
 
-The *customized.fasta* is the user-defined database, which is either nucleic or amino-acid sequences with FASTA format. In this condition, it doesn't require the RNA-seq data to assembly the condidated transcripts any more.
+Where *customized.fasta* is the user-collected database, which is either nucleic or amino-acid sequences with FASTA format. In this condition, it doesn't require the RNA-seq data to assembly the condidated transcripts any more.
 
 ### 4.5 annotate
 
-Type the command below for polypeptide annotation. This step is comprised of motif search, signal peptides prediction, functional annotation and BLAST similarity alignment.
+Enter the following command to complete the functional annotation. This step consists of motif search, signal peptides prediction, functional annotation and BLAST similarity alignment.
 
 ```sh
 $ docker exec pipp pipe annotate --sample ${sample} 
@@ -187,7 +193,7 @@ $ docker exec pipp pipe annotate --sample ${sample}
 
 The corresponding result will be stored in the **<work/annotation/>** folder.
 
->NOTE3: The '--attool' option will determine the tool for functional annotation. The default argument '**0**' that represents the KOBAS will connect the KOBAS online server and finsh the annotation process without database configuration in the **<config/>** folder. Nevertheless, argument '**1**' will utilize Sma3s for the annotation. In this case, it's required to complete the local database configuration in <config/sma3sdb> with uniref90.annot.gz and uniref90.fasta.gz at first (www.bioinfocabd.upo.es/sma3s/db).
+>NOTE3: The '--attool' option will determine which tools are used in the functional annotation step. The default argument '**0**' that represents the KOBAS will connect the KOBAS online server and finsh the annotation process without database configuration in the **<config/>** folder. Nevertheless, argument '**1**' will utilize Sma3s for the annotation. In this case, it's required to complete the local database configuration in <config/sma3sdb> with uniref90.annot.gz and uniref90.fasta.gz from [www.bioinfocabd.upo.es/sma3s/db](www.bioinfocabd.upo.es/sma3s/db) at first.
 
 ### 4.6 report
 

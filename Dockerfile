@@ -10,13 +10,17 @@ LABEL documentation="https://github.com/xxxx"
 LABEL license="https://www.gnu.org/licenses/gpl.html"
 LABEL tags="Proteomics"
 
-# Maintainer
 MAINTAINER Shaohang Xu <xsh.skye@gmail.com>
 
 ENV DEBIAN_FRONTEND noninteractive
+ENV TRINITY_VERSION 2.6.6
 
-RUN mv /etc/apt/sources.list /etc/apt/sources.list.bkp && \
-	#require modification
+RUN echo "151.101.24.133 assets-cdn.github.com" >>/etc/hosts && \
+	echo "151.101.197.194 github.global.ssl.fastly.net" >>/etc/hosts && \
+	echo "52.74.223.119 www.github.com" >>/etc/hosts
+
+RUN mv /etc/apt/sources.list /etc/apt/sources.list.bak && \
+	### NOTE: replace the mirror with "http://deb.debian.org/debian/" when tool release.
     bash -c 'echo -e "deb http://mirrors.163.com/debian/ stable main non-free contrib\n" > /etc/apt/sources.list' && \
     cat /etc/apt/sources.list
 
@@ -26,6 +30,8 @@ RUN apt-get clean all && \
     apt-get install -y --no-install-recommends \
         wget            \
         zip             \
+		libbz2-dev    \
+		liblzma-dev  \
         build-essential \
         openjdk-8-jre   \
         zlib1g-dev &&   \
@@ -49,36 +55,52 @@ RUN groupadd fuse && \
     chown biouser:biouser /data && \
     chown biouser:biouser /config
 
-#ENV PATH=$PATH:/home/biouser/bin
 ENV PATH=/opt/conda/bin:$PATH
 ENV HOME=/home/biouser
 
 ## set up tool config and deployment area:
 ENV BIN /usr/local/bin/
-
+ENV LD_LIBRARY_PATH=/usr/local/lib
 #dirs for self-tools and pipe scripts
 ADD Auxtools /opt/Auxtools/
 ADD Pipeline/ /opt/Pipeline
 
-#install Trinity
+### install Trinity
 #pandoc is essential for rmarkdown
-ADD Trinity-v2.5.0.tar.gz /tmp/
+#ADD Trinity-v${TRINITY_VERSION}.tar.gz /tmp/
 RUN mv /opt/Pipeline/pipe ${BIN} && chmod +x /usr/local/bin/pipe && \
 	echo "==> Install compile tools..."  && \
 		apt-get update && apt-get install -y --no-install-recommends \
 				less \ 
 #				libexpat1-dev \
+				libncurses5-dev \
 				pandoc \
 				git \
 				blast2 \
 				rsync && \
+
+	echo "==> Download, compile, and install ..."  && \  
+		wget https://github.com/samtools/samtools/releases/download/1.7/samtools-1.7.tar.bz2 -O /tmp/samtools-1.7.tar.bz2 && \
+		tar xvf /tmp/samtools-1.7.tar.bz2 -C /tmp/ && \
+		cd /tmp/samtools-1.7/ && \
+		./configure && make && make install && \
+		rm -rf /tmp/samtools-1.7/ && \
+		wget https://github.com/gmarcais/Jellyfish/releases/download/v2.2.7/jellyfish-2.2.7.tar.gz -O /tmp/jellyfish-2.2.7.tar.gz && \
+		tar xvf /tmp/jellyfish-2.2.7.tar.gz -C /tmp/ && \
+		cd /tmp/jellyfish-2.2.7/ && \
+		./configure && make && make install && \
+		rm -rf /tmp/jellyfish-2.2.7/ && \
+		wget https://github.com/COMBINE-lab/salmon/releases/download/v0.9.1/Salmon-0.9.1_linux_x86_64.tar.gz -O /opt/Salmon-0.9.1_linux_x86_64.tar.gz && \
+		cd /opt/ && tar xvf Salmon-0.9.1_linux_x86_64.tar.gz && \
+		ln -s /opt/Salmon-latest_linux_x86_64/bin/salmon $BIN/.  && \
 	echo "==> Download, compile, and install..."  && \  
-		#wget "https://github.com/trinityrnaseq/trinityrnaseq/archive/Trinity-v2.5.0.tar.gz" | tar zxv  && \ 
-		cd /tmp/trinityrnaseq-Trinity-v2.5.0/ && \
+		wget "https://github.com/trinityrnaseq/trinityrnaseq/archive/Trinity-v${TRINITY_VERSION}.tar.gz" -O /tmp/Trinity-v${TRINITY_VERSION}.tar.gz  && \ 
+		tar xvf /tmp/Trinity-v${TRINITY_VERSION}.tar.gz -C /tmp/ && \
+		cd /tmp/trinityrnaseq-Trinity-v${TRINITY_VERSION}/ && \
 		make && \
 		make plugins && \ 
 		make install && \ 
-		cd ../ && rm -rf trinityrnaseq-Trinity-v2.5.0/ Trinity-v2.5.0.tar.gz && \
+		rm -rf /tmp/trinityrnaseq-Trinity-v${TRINITY_VERSION}/ /tmp/Trinity-v${TRINITY_VERSION}.tar.gz && \
 		cd /opt/ && git clone https://github.com/OpenGene/AfterQC.git && \
 	echo "==> Clean up..."  && \   
 		apt-get remove -y --auto-remove rsync git && \
@@ -119,22 +141,22 @@ RUN wget https://npm.taobao.org/dist/phantomjs/phantomjs-2.1.1-linux-x86_64.tar.
 	rm -rf /tmp/casperjs-1.1.0.tar.gz
 
 #add Trinity ENV
-ENV TRINITY_HOME /usr/local/bin/trinityrnaseq-Trinity-v2.5.0/
+ENV TRINITY_HOME /usr/local/bin/trinityrnaseq-Trinity-v${TRINITY_VERSION}/
 #NOTE: The python packages which are installed by pip will be stored in /home/biouser/.local/bin and /home/biouser/.local/lib.
 ENV PATH=${TRINITY_HOME}:/home/biouser/.local/bin:${PATH}    
 
 USER biouser
-##以下三行为清华源,实际提交时要注释掉,换成默认的管方源
+##NOTE: *** the tsinghua mirror could be deleted ***
 RUN conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
 RUN conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r/
 RUN conda config --set show_channel_urls yes
 
 #NOTE: r-xml of conda is required for XML of R packages.
-#中间的中科大镜像最后发布时可以去掉
 # gcc, gxx(g++) and gfortran is essential for the compilation of MSA. It can be removed after the completion of compilation.
 RUN	conda install gcc_linux-64 gcc_impl_linux-64 binutils_linux-64 binutils_impl_linux-64 gxx_linux-64 gxx_impl_linux-64 gfortran_impl_linux-64 gfortran_linux-64\ 
 	petl r=3.4.2 r-ggplot2 r-xml && \
-    R -e 'source("https://bioconductor.org/biocLite.R");   repos <- getOption("repos");repos["CRAN"] <- "https://mirrors.ustc.edu.cn/CRAN/";options(repos = repos); options(BioC_mirror = "https://mirrors.ustc.edu.cn/bioc/");biocLite(c("Biostrings","data.table","msa","rmarkdown","prettydoc","ggplot2","plotly","kableExtra","treemapify","ggthemes"));' && \
+	#R -e 'source("https://bioconductor.org/biocLite.R"); biocLite(c("Biostrings","data.table","msa","rmarkdown","prettydoc","ggplot2","plotly","kableExtra","treemapify","ggthemes"));' && \
+    R -e 'source("https://bioconductor.org/biocLite.R"); repos <- getOption("repos");repos["CRAN"] <- "https://mirrors.ustc.edu.cn/CRAN/";options(repos = repos); options(BioC_mirror = "https://mirrors.ustc.edu.cn/bioc/");biocLite(c("Biostrings","data.table","msa","rmarkdown","prettydoc","ggplot2","plotly","kableExtra","treemapify","ggthemes"));' && \
 	conda remove gcc_linux-64 gcc_impl_linux-64 binutils_linux-64 binutils_impl_linux-64 gxx_linux-64 gxx_impl_linux-64 gfortran_impl_linux-64 gfortran_linux-64 && \ 
 	conda clean -y --all && rm -rf /tmp/* 
 
