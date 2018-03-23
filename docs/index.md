@@ -1,8 +1,8 @@
-# PIPP
+# PPIP
 
 ## 1 A comprehensive framework for accurate and efficient endogenous peptide analysis
 
-The **PIPP** is a pipeline made up of multiple steps for endogenous peptide analysis. It is based on popular open-source projects Docker, an open source technology used to package applications and their dependencies into a standardized and environment-agnostic software container. Currently, this image focus on the de novo identification of endogenous peptide (e.g. signal peptides or neuropeptides). 
+The **PPIP** is a pipeline made up of multiple steps for endogenous peptide analysis. It is based on popular open-source projects Docker, an open source technology used to package applications and their dependencies into a standardized and environment-agnostic software container. Currently, this image focus on the de novo identification of endogenous peptide (e.g. signal peptides or neuropeptides). 
 
 ***
 
@@ -12,7 +12,7 @@ The demo data of this software can be downloaded from google drive. A MGF file a
 
 Furthermore, we also provided two NCBI non-redundant protein sequence databases for the Blast annotation step. These two database were processed well in advance and divied into two categories: *Plant.fa* and *Animal.fa*. Users can select the appropriate database according to the actual situation. Of course, users also can customize their Blast database from another public source (e.g. [UniProt](http://www.uniprot.org/)).
 
-* [**Click me to obtain demo data from Google Drive**](https://drive.google.com/open?id=1tprERIRcRpK8Ngktom6w5V5XQoSM0jte). There are three files in the directory:
+[Click me to obtain demo data from Google Drive](https://drive.google.com/open?id=1tprERIRcRpK8Ngktom6w5V5XQoSM0jte). There are three files in the directory:
   1. *<font color="#5FA90A">PPIP_data.tar.gz</font>*: demo data of RNA-seq and MS2. 
   2. *<font color="#5FA90A">animal.fa.gz</font>*: animal sequences from NCBI non-redundant database for Blast.
   3. *<font color="#5FA90A">Plannt.fa.gz</font>*: plant sequences from NCBI non-redundant database for Blast.
@@ -23,14 +23,14 @@ A demo report which is generated after completing the entire process can be view
 
 ***
 
-## 3 Minimum system requirements to run PIPP natively in Linux, Windows or Mac:
+## 3 Minimum system requirements to run PPIP natively in Linux, Windows or Mac:
 
 - RAM: 10 GB (more is better)
 - Processor: 1+ CPU (more is better)
 - Hard Disk space: 20+ GB
 - Internet connectivity: Faster is better when installing.
 
-Also, you must enable Intel VT-x and AMD-V in your BIOS. Many people will already have Intel VT-x and AMD-V enabled though, so try to install **PIPP** first before worrying about this requirement. If necessary though, see the following for detailed instructions:
+Also, you must enable Intel VT-x and AMD-V in your BIOS. Many people will already have Intel VT-x and AMD-V enabled though, so try to install **PPIP** first before worrying about this requirement. If necessary though, see the following for detailed instructions:
 
 [How to Enable Intel VT-x in Your Computer’s BIOS or UEFI Firmware](http://www.howtogeek.com/213795/how-to-enable-intel-vt-x-in-your-computers-bios-or-uefi-firmware/)
 
@@ -40,20 +40,20 @@ If you are going to run this image in Windows system, it requires Microsoft Wind
 
 ***
 
-## 4 Obtain the PIPP Docker image
+## 4 Obtain the PPIP Docker image
 
 ### 4.1  Build the docker image by yourself
 
-If you want to build the PIPP image by yourself, you need to clone the GitHub repository with following command at first. 
+If you want to build the **PPIP** image by yourself, you need to clone the GitHub repository with following command at first. 
 
 ```sh
 $ git clone git@github.com:Shawn-Xu/PPIP.git
 ```
 
-Then enter the **PIPP** folder and type the following commands to build the images.
+Then enter the **PPIP** folder and type the following commands to build the images.
 
 ```sh
-$ docker build --no-cache --rm -t shawndp/pipp .
+$ docker build --no-cache --rm -t shawndp/ppip .
 ```
 
 However, for simplicity, we do not recommend building docker images from scratch because this process may take a long time and a good network.
@@ -68,22 +68,22 @@ $ docker pull shawndp/ppip
 
 ***
 
-## 5 Running PIPP
+## 5 Running PPIP
 
 Before the process begins, it is necessary to create a new directory as a workspace at first. 
 
 ```sh
-$ pw='pipp_workspace'
+$ pw='ppip_workspace'
 $ sample="demo"
 
 $ mkdir -p ${pw}
 ```
 
-Then, we have to create a Docker container and mount the workspace folder as the **</data/>** of the Docker container. In this instance, we set the **PIPP** as the container name. Of course, you can rename it as your wish and keep it consistent in the following example.
+Then, we have to create a Docker container and mount the workspace folder as the **</data/>** of the Docker container. In this instance, we set the **PPIP** as the container name. Of course, you can rename it as your wish and keep it consistent in the following example.
 
 ```sh
-$ docker create --name pipp -t -u $(id -u) -v=${PWD}/${pw}:/data/ shawndp/pipp  #create a container but not running
-$ docker start pipp   #start the container
+$ docker create --name ppip -t -u $(id -u) -v=${PWD}/${pw}:/data/ shawndp/ppip  #create a container but not running
+$ docker start ppip   #start the container
 ```
 
 ### 5.1 init
@@ -91,7 +91,7 @@ $ docker start pipp   #start the container
 Since we have a workspace and an activated container, we will use the following commands to initialize these directories. 
 
 ```sh
-$ docker exec pipp pipe init  --sample ${sample}
+$ docker exec ppip pipe init  --sample ${sample}
 ```
 
 After that, we can list the contents of directories in a tree-like format with a linux command "tree". The comments after each line are used to explain the purpose of related files/directories.
@@ -117,9 +117,9 @@ Before the software start to run, we need to prepare the raw data or configurati
 - d) Copy known protein sequence (e.g. NR, RefSeq, Uniprot) to the <config/blastdb> (Recommend).
 - e) Download the uniref90.annot.gz and uniref90.fasta.gz to the <config/sma3sdb> from www.bioinfocabd.upo.es/sma3s/db (Required if the annotation tool is configured to use Sma3s).
 
->NOTE1: The input mass spectra formats can be mzML, mzXML, mzML, mgf, ms2, pkl and _dta.txt. In many case, msconvert (http://proteowizard.sourceforge.net/tools/msconvert.html) can be used to convert all common raw formats into those open data formats described before.
+>NOTE1: The input mass spectra formats can be mzML, mzXML, mzML, mgf, ms2, pkl and _dta.txt. In many case, [msconvert](http://proteowizard.sourceforge.net/tools/msconvert.html) can be used to convert all common raw formats into those open data formats described before.
 
->NOTE2: It is recommended to prepare the Blast database in the **<config/blastdb>** folder so that the bioactive peptides could get the relevant protein functional description. Otherwise, the procedure of protein entry anotation will be skipped. As for the common databases, NCBI NR could be obtained from NCBI ftp server (https://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nr.gz), and alternative manually annotated and non-redundant protein database could also be acquired from UniProt Knowledgebase (ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.fasta.gz). 
+>NOTE2: It is recommended to prepare the Blast database in the **<config/blastdb>** folder so that the bioactive peptides could get the relevant protein functional description. Otherwise, the procedure of protein entry anotation will be skipped. As for the common databases, NCBI NR could be obtained from [NCBI ftp server](https://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nr.gz), and alternative manually annotated and non-redundant protein database could also be acquired from [UniProt Knowledgebase](ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.fasta.gz). 
 
 A specific example that annotation tool is set as **KOBAS**:
 
@@ -165,7 +165,7 @@ $ tree ${pw}
 Type the command below for quanlity control and filter of RNA-seq reads.
 
 ```sh
-$ docker exec pipp pipe rnaqc --fqdir config/fastq/ --sample ${sample}
+$ docker exec ppip pipe rnaqc --fqdir config/fastq/ --sample ${sample}
 ```
 
 It will go through all fastq files in a folder and then output three folders in **<work/qc>** folder: good, bad and QC folders, which contains good reads, bad reads and the QC results of each fastq file/pair.
@@ -175,7 +175,7 @@ It will go through all fastq files in a folder and then output three folders in 
 Type the command below for de novo assembly of RNA-seq reads.
 
 ```sh
-$ docker exec pipp pipe denovo  --left work/qc/good/demo_1.good.fq.gz --right work/qc/good/demo_2.good.fq.gz --max_memory 10G --sample ${sample} --threads 8
+$ docker exec ppip pipe denovo  --left work/qc/good/demo_1.good.fq.gz --right work/qc/good/demo_2.good.fq.gz --max_memory 10G --sample ${sample} --threads 8
 ```
 
 When completed, Trinity will create a **Trinity.fasta** file in the **<work/trinity/>** directory. This file will be used as the database for step **msalign**.
@@ -185,7 +185,7 @@ When completed, Trinity will create a **Trinity.fasta** file in the **<work/trin
 Type the command below for peptide identification by scoring MS/MS spectra against database.
 
 ```sh
-$ docker exec pipp pipe msalign --input work/trinity/Trinity.fasta --sample ${sample} --spectrum config/msraw/demo.mgf --modfile config/par/MSGFPlus_Mods.txt --threads 8
+$ docker exec ppip pipe msalign --input work/trinity/Trinity.fasta --sample ${sample} --spectrum config/msraw/demo.mgf --modfile config/par/MSGFPlus_Mods.txt --threads 8
 ```
 
 The corresponding result will be stored in the **<work/msalign/>** folder.
@@ -193,7 +193,7 @@ The corresponding result will be stored in the **<work/msalign/>** folder.
 Moreover, if you had some bioactive peptide sequences collected from pubic sources, you can skip the step ***rnaqc** and **denovo**, and just start from the step **msalign** with the options *--input*. For example,
 
 ```sh
-$ docker exec pipp pipe msalign --input config/customized.fasta  --sample ${sample} --spectrum config/msraw/demo.mgf --threads 8
+$ docker exec ppip pipe msalign --input config/customized.fasta  --sample ${sample} --spectrum config/msraw/demo.mgf --threads 8
 ```
 
 Where *customized.fasta* is the user-collected database, which is either nucleic or amino-acid sequences with FASTA format. In this condition, it doesn't require the RNA-seq data to assembly the condidated transcripts any more.
@@ -203,7 +203,7 @@ Where *customized.fasta* is the user-collected database, which is either nucleic
 Enter the following command to complete the functional annotation. This step consists of motif search, signal peptides prediction, functional annotation and BLAST similarity alignment.
 
 ```sh
-$ docker exec pipp pipe annotate --sample ${sample} 
+$ docker exec ppip pipe annotate --sample ${sample} 
 ```
 
 The corresponding result will be stored in the **<work/annotation/>** folder.
@@ -215,7 +215,7 @@ The corresponding result will be stored in the **<work/annotation/>** folder.
 Type the commands below for rendering HTML-based report.
 
 ```sh
-$ docker exec pipp pipe report --sample ${sample}
+$ docker exec ppip pipe report --sample ${sample}
 ```
 
 At the end of this step, it will tidy up all of the previous results and produce a HTML-based document in the **<out/>** folder. And lots of modern browsers, such as Chrome, Firefox, Edge, can be used to access all the information in the report with the '*<sample>.html*' main page.
@@ -225,13 +225,13 @@ At the end of this step, it will tidy up all of the previous results and produce
 To simplify the usage of this pipeline, we provide a simple interface mainly intended to allow users to run the pipeline procedures from 2 to 6 in one step. In other words, you can just run the step "init" and step "all" to complete all procedures in the pipeline.
 
 ```sh
-$ docker exec pipp pipe all --sample ${sample}
+$ docker exec ppip pipe all --sample ${sample}
 ```
 
 By the way, the code below is the command used to produce the example report and result of our paper.
 
 ```sh
-docker exec pipp pipe all --threads 10 --max_memory 20G --sample Scorpion --fragid 3 --evalue 0.00001 --pretol 10ppm --attool 1
+docker exec ppip pipe all --threads 10 --max_memory 20G --sample Scorpion --fragid 3 --evalue 0.00001 --pretol 10ppm --attool 1
 ```
 
 ***
@@ -253,7 +253,7 @@ Alternatively, you can also simplely use a interface **all** to automaticly run 
 
 ## 7 Command line options
 
-Type *'docker exec pipp pipe -h'* to get the option for running **PIPP** with various modes are shown below.
+Type *'docker exec ppip pipe -h'* to get the option for running **PPIP** with various modes are shown below.
 
 | Option | Definition |
 | ------ | ------ | 
@@ -275,7 +275,7 @@ These options are general arguments implemented in all of the modes.
 
 ### 7.2 Quality control for reads options
 
-Type *'docker exec pipp pipe rnaqc -h'* for help.
+Type *'docker exec ppip pipe rnaqc -h'* for help.
 
 | Option | Definition |
 | ------ | ------ |
@@ -287,7 +287,7 @@ Type *'docker exec pipp pipe rnaqc -h'* for help.
 
 ### 7.3 Denovo assembly options
 
-Type *'docker exec pipp pipe denovo -h'* for help.
+Type *'docker exec ppip pipe denovo -h'* for help.
 
 | Option | Definition |
 | ------ | ------ |
@@ -301,7 +301,7 @@ Type *'docker exec pipp pipe denovo -h'* for help.
 ### 7.4 Mass spectra alignment options
 
 
-Type *'docker exec pipp pipe msalign -h'* for help.
+Type *'docker exec ppip pipe msalign -h'* for help.
 
 #### 7.4.1 Precursor proteins of endogenous peptide construction options:
 
@@ -316,7 +316,7 @@ Type *'docker exec pipp pipe msalign -h'* for help.
 | ------ | ------ |
 | --engine EngineName | The ms search engine to use. (default: MSGFPlus) |
 | --spectrum SpectrumFile | REQUIRED. Spectrum file name. Currently, MS-GF+ supports the following file formats: mzML, mzXML, mzML, mgf, ms2, pkl and _dta.txt. (default: None) |
-| --modfile FilePath | Modification file of MS-GF+. For more details, please check: https://github.com/sangtaekim/msgfplus/blob/master/doc/examples/Mods.txt (default: config/par/MSGFPlus_Mods.txt) |
+| --modfile FilePath | Modification file of MS-GF+. (default: config/par/MSGFPlus_Mods.txt) |
 | --max_memory max_memory | suggested max memory to use by MS-GF+ where limiting can be enabled. (default: 10G) |
 | --inst MS2DetectorID | MS detector. Currently, MS-GF+ supports the following detectors: 0: Low-res LCQ/LTQ, 1: Orbitrap/FTICR, 2: TOF, 3: Q-Exactive. (default: 3) |
 | --fragid FragmentMethodID | Fragmentation method identifier (used to determine the scoring model). 0: as written in the spectrum or CID if no info (Default), 1: CID, 2: ETD, 3: HCD, 4: Merge spectra from the same precursor (default: 0) |
@@ -330,7 +330,7 @@ Type *'docker exec pipp pipe msalign -h'* for help.
 
 ### 7.5 Annotation options
 
-Type *'docker exec pipp pipe annotate -h'* for help.
+Type *'docker exec ppip pipe annotate -h'* for help.
 
 #### 7.5.1 SignalP options
 
@@ -365,7 +365,7 @@ Type *'docker exec pipp pipe annotate -h'* for help.
 
 ### 7.6 HTML report options
 
-Type *'docker exec pipp pipe report -h'* for help.
+Type *'docker exec ppip pipe report -h'* for help.
 
 | Option | Definition |
 | ------ | ------ |

@@ -1,4 +1,4 @@
-![PIPP_logo](https://github.com/Shawn-Xu/PPIP/blob/master/docs/img/PPIP_logo_small.png)
+![PPIP_logo](https://github.com/Shawn-Xu/PPIP/blob/master/docs/img/PPIP_logo_small.png)
 
 ## About this Repo
 

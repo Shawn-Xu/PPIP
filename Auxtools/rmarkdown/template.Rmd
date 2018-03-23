@@ -30,7 +30,7 @@ require(kableExtra)
 ```
 # Introduction
 
-This report is designed to facilitate summarization and rapid browsing of complex results in PIPP pipelines.
+This report is designed to facilitate summarization and rapid browsing of complex results in PPIP pipelines.
 
 # 1 QC
 
