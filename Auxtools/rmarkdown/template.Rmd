@@ -85,11 +85,11 @@ htmltools::div(plot_ly(x = x) %>%
 
 # 2 Basic result
 
-The main purpose of this chapter is to describe the basic statistical analysis of polypeptides.
+The main purpose of this chapter is to describe the basic statistical analysis of endogenous peptides.
 
-## 2.1 Identified polypeptide length distribution
+## 2.1 Identified peptide length distribution
 
-Amino acid length distribution of the polypeptides.
+Amino acid length distribution of the identified peptides.
 
 ```{r fig.width=7, fig.height=4, fig.align='center',echo=FALSE,warning=FALSE , message=FALSE}
 #pep length 分布，clean
@@ -104,7 +104,7 @@ htmltools::div(plot_ly(x = x) %>%
 	layout(yaxis2 = list(overlaying = "y", side = "right"),xaxis=list(title="Peptide length"),yaxis = list(title = "Density")), align = "center")
 ```
 
-## 2.2 Spectral count of identified polypeptide
+## 2.2 Spectral count of identified peptides
 
 Spectral count, defined as the total number of spectra identified for a peptide, has gained acceptance as a practical in proteomic studies. As a supplement to Q-value, the more count a peptide has, the more credible the peptide is.
 
@@ -145,9 +145,9 @@ htmltools::div(p,align = "center")
 
 ```
 
-## 2.4 Cysteine distribution of polypeptides
+## 2.4 Cysteine distribution of peptides
 
-During the maturation process of proteins in eukaryote, cysteine residues are oxidised and form disulfide bridges, which are important to maintain protein shapes. Through this shape, disulfide bonds play en essential role for the stability and the activity of proteins. The following graph use an pie to describe how many cysteine residues in each polypeptide.
+During the maturation process of proteins in eukaryote, cysteine residues are oxidised and form disulfide bridges, which are important to maintain protein shapes. Through this shape, disulfide bonds play en essential role for the stability and the activity of proteins. The following graph use an pie to describe how many cysteine residues in each peptide.
 
 ```{r echo=FALSE,warning=FALSE , message=FALSE}
 #cys，clean
@@ -168,7 +168,7 @@ p <- plot_ly(cysc,
 p
 ```
 
-## 2.5 Summary table of polypeptides
+## 2.5 Summary table of peptides
 
 This table includes the peptide identification result that could be used for further analysis.
 
@@ -190,7 +190,7 @@ Furthermore, you can get more detailed PSM (peptide-spectrum match) information 
 
 # 3 Annotation {#anno}
 
-This chapter aims to explore the sequence motifs and potential function of the polypeptides via serveral different tools.
+This chapter aims to explore the sequence motifs and potential function of the peptides via serveral different tools.
 
 ## 3.1 MSA
 
@@ -225,7 +225,7 @@ d %>%
 
 ## 3.3 Functional annotation
 
-Gene ontology (GO) is one the fundamental functional classification system. In this sub-section, it was applied to annotate the polypeptides and illustrated as a treemap below:
+Gene ontology (GO) is one the fundamental functional classification system. In this sub-section, it was applied to annotate the peptides and illustrated as a treemap below:
 
 ```{r echo=FALSE, rownames.print=FALSE,warning=FALSE , message=FALSE, eval=@{kobas_code}}
 library(treemapify) 
@@ -307,7 +307,7 @@ plot_treemap(sumfile,chunkId,"Cellular component")
 chunkId<-'#Category "Molecular function"'
 plot_treemap(sumfile,chunkId,"Molecular function")
 
-chunkId<-'Category "Biological process"'
+chunkId<-'#Category "Biological process"'
 plot_treemap(sumfile,chunkId,"Biological process")
 ```
 

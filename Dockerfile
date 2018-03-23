@@ -105,7 +105,7 @@ RUN mv /opt/Pipeline/pipe ${BIN} && chmod +x /usr/local/bin/pipe && \
 	echo "==> Clean up..."  && \   
 		apt-get remove -y --auto-remove rsync git && \
 		apt-get clean                                  && \   
-		rm -rf /var/lib/apt/lists/*
+		rm -rf /var/lib/apt/lists/*  && rm -rf /tmp/*
 
 #install MSGFPLUS and bowtie。Trinity require Bowtie.
 #*#ADD bowtie2-2.3.3.1-linux-x86_64.zip /tmp/
@@ -153,8 +153,9 @@ RUN conda config --set show_channel_urls yes
 
 #NOTE: r-xml of conda is required for XML of R packages.
 # gcc, gxx(g++) and gfortran is essential for the compilation of MSA. It can be removed after the completion of compilation.
-RUN	conda install gcc_linux-64 gcc_impl_linux-64 binutils_linux-64 binutils_impl_linux-64 gxx_linux-64 gxx_impl_linux-64 gfortran_impl_linux-64 gfortran_linux-64\ 
-	petl r=3.4.2 r-ggplot2 r-xml && \
+# Trinity 2.6.6 require the python numpy package.
+RUN	conda install gcc_linux-64 gcc_impl_linux-64 binutils_linux-64 binutils_impl_linux-64 gxx_linux-64 gxx_impl_linux-64 gfortran_impl_linux-64 gfortran_linux-64 \ 
+	petl r=3.4.2 r-ggplot2 r-xml numpy && \
 	#R -e 'source("https://bioconductor.org/biocLite.R"); biocLite(c("Biostrings","data.table","msa","rmarkdown","prettydoc","ggplot2","plotly","kableExtra","treemapify","ggthemes"));' && \
     R -e 'source("https://bioconductor.org/biocLite.R"); repos <- getOption("repos");repos["CRAN"] <- "https://mirrors.ustc.edu.cn/CRAN/";options(repos = repos); options(BioC_mirror = "https://mirrors.ustc.edu.cn/bioc/");biocLite(c("Biostrings","data.table","msa","rmarkdown","prettydoc","ggplot2","plotly","kableExtra","treemapify","ggthemes"));' && \
 	conda remove gcc_linux-64 gcc_impl_linux-64 binutils_linux-64 binutils_impl_linux-64 gxx_linux-64 gxx_impl_linux-64 gfortran_impl_linux-64 gfortran_linux-64 && \ 
