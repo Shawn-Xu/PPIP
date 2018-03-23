@@ -12,14 +12,14 @@ The demo data of this software can be downloaded from google drive. A MGF file a
 
 Furthermore, we also provided two NCBI non-redundant protein sequence databases for the Blast annotation step. These two database were processed well in advance and divied into two categories: *Plant.fa* and *Animal.fa*. Users can select the appropriate database according to the actual situation. Of course, users also can customize their Blast database from another public source (e.g. [UniProt](http://www.uniprot.org/)).
 
-* [Click me to obtain demo data from Google Drive](https://drive.google.com/open?id=1tprERIRcRpK8Ngktom6w5V5XQoSM0jte). There are three files in the directory:
-  1. *PPIP_data.tar.gz*: demo data of RNA-seq and MS2. 
-  2. *animal.fa.gz*: animal Blast database processed from NCBI non-redundant.
-  3. *Plannt.fa.gz*: plant Blast database processed from NCBI non-redundant.
+* [**Click me to obtain demo data from Google Drive**](https://drive.google.com/open?id=1tprERIRcRpK8Ngktom6w5V5XQoSM0jte). There are three files in the directory:
+  1. *<font color="#5FA90A">PPIP_data.tar.gz</font>*: demo data of RNA-seq and MS2. 
+  2. *<font color="#5FA90A">animal.fa.gz</font>*: animal sequences from NCBI non-redundant database for Blast.
+  3. *<font color="#5FA90A">Plannt.fa.gz</font>*: plant sequences from NCBI non-redundant database for Blast.
 
 A demo report which is generated after completing the entire process can be viewed through the following links: 
 
-[**Click me to access the final demo report**](report/Scorpion.html)
+  [<font color="#dd0000">Click me to access the final demo report</font>](report/Scorpion.html)
 
 ***
 
