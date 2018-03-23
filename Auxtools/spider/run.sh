@@ -1,4 +1,4 @@
-#--fasta是必需参数，别的都是可选参数。
+#--fasta is the required par, another par is optional.
 casperjs signalP.js  --fasta=test.fasta
 casperjs signalP.js  --fasta=test.fasta --dcut=user --notm=0.35
 

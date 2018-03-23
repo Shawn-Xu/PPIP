@@ -2,9 +2,8 @@
 # -*- coding: UTF-8 -*-
 '''
 Version: 1.0
-Author: XuShaohang
-E-mail:xushaohang@deepxomics.com
-Company: DeepXOmics
+Author: Shaohang Xu
+E-mail: gmail.com
 '''
 import sys,argparse
 import subprocess

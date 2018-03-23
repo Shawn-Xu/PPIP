@@ -225,7 +225,7 @@ At the end of this step, it will tidy up all of the previous results and produce
 To simplify the usage of this pipeline, we provide a simple interface mainly intended to allow users to run the pipeline procedures from 2 to 6 in one step. In other words, you can just run the step "init" and step "all" to complete all procedures in the pipeline.
 
 ```sh
-$ docker exec pipp pipe all --threads 8 --max_memory 10G  --sample ${sample}
+$ docker exec pipp pipe all --sample ${sample}
 ```
 
 By the way, the code below is the command used to produce the example report and result of our paper.

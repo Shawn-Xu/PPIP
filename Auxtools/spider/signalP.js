@@ -1,5 +1,8 @@
 var casper = require('casper').create({
-        //以下两行当正式发布时可以注释掉，开发时请开启
+        // used in release
+		verbose: false,
+        logLevel: "info",
+		//used in development
         verbose: true,
         logLevel: "debug"
 });
@@ -58,7 +61,7 @@ casper.then(function() {
 			"SEQSUB": casper.cli.get("fasta"), //
 			"method": method,   //best, notm   (default is best)
 			"orgtype": orgtype,   //euk, gram+, gram-    (default is euk)
-			"format": "short",   //不让用户设置
+			"format": "short", 
 			"minlen": minlen,
 			"trunc": trunc,
 			"Dcut-type": "user",  //user
@@ -72,7 +75,7 @@ casper.then(function() {
 			"SEQSUB": casper.cli.get("fasta"), //
 			"method": method,   //best, notm   (default is best)
 			"orgtype": orgtype,   //euk, gram+, gram-    (default is euk)
-			"format": "short",   //不让用户设置
+			"format": "short", 
 			"minlen": minlen,
 			"trunc": trunc,
 			"Dcut-type": casper.cli.get('Dcut-type')  //default, ver3
@@ -89,7 +92,7 @@ casper.then(function() {
 		function fail () {
 			casper.log("Failed to load results",'error');
 		},
-		600000 // timeout limit in milliseconds,这里设成10分钟
+		600000 // timeout limit in milliseconds, this is ten minutes
 	);
 });
 casper.then(function () {

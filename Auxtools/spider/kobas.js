@@ -9,9 +9,13 @@
  *综上，casperjs优于selenium。
 */
 var casper = require('casper').create({
-	//以下两行当正式发布时可以注释掉，开发时请开启
+	// used in release
+	verbose: false,
+	logLevel: "info",
+	//used in development
 	verbose: true,
 	logLevel: "debug"
+
 });
 var fs = require('fs');
 //var fname = 'kobas_result.txt';

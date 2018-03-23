@@ -2,9 +2,8 @@
 # -*- coding: UTF-8 -*-
 '''
 Version: 1.0
-Author: XuShaohang
-E-mail:xushaohang@deepxomics.com
-Company: DeepXOmics
+Author: Shaohang Xu
+E-mail: xsh.skye@gmail.com
 '''
 import sys,argparse
 from itertools import groupby
