@@ -8,7 +8,7 @@ The **PPIP** is a pipeline made up of multiple steps for endogenous peptide anal
 
 ## 2 Demo data used in this project
 
-The demo data of this software can be downloaded from google drive. A MGF file and two fastq files were packaged with tar and subsequently compressed with gzip. 
+The demo data of this software can be downloaded from Google Drive. A MGF file and two fastq files were packaged with tar and subsequently compressed with gzip. 
 
 Furthermore, we also provided two NCBI non-redundant protein sequence databases for the Blast annotation step. These two database were processed well in advance and divied into two categories: *Plant.fa* and *Animal.fa*. Users can select the appropriate database according to the actual situation. Of course, users also can customize their Blast database from another public source (e.g. [UniProt](http://www.uniprot.org/)).
 
@@ -56,7 +56,7 @@ Then enter the **PPIP** folder and type the following commands to build the imag
 $ docker build --no-cache --rm -t shawndp/ppip .
 ```
 
-However, for simplicity, we do not recommend building docker images from scratch because this process may take a long time and a good network.
+However, for simplicity, we do not recommend building docker images from scratch because this process may take a long time and require a good network.
 
 ### 4.2  Pull the image from Docker Hub (highly recommend)
 
@@ -79,7 +79,7 @@ $ sample="demo"
 $ mkdir -p ${pw}
 ```
 
-Then, we have to create a Docker container and mount the workspace folder as the **</data/>** of the Docker container. In this instance, we set the **PPIP** as the container name. Of course, you can rename it as your wish and keep it consistent in the following example.
+Then, we have to create a Docker container and mount the workspace folder as the **</data/>** of the Docker container. In this instance, we set the **ppip** as the container name. Of course, you can rename it as your wish and keep it consistent in the following example.
 
 ```sh
 $ docker create --name ppip -t -u $(id -u) -v=${PWD}/${pw}:/data/ shawndp/ppip  #create a container but not running
@@ -208,11 +208,11 @@ $ docker exec ppip pipe annotate --sample ${sample}
 
 The corresponding result will be stored in the **<work/annotation/>** folder.
 
->NOTE3: The '--attool' option will determine which tools are used in the functional annotation step. The default argument '**0**' that represents the KOBAS will connect the KOBAS online server and finsh the annotation process without database configuration in the **<config/>** folder. Nevertheless, argument '**1**' will utilize Sma3s for the annotation. In this case, it's required to complete the local database configuration in <config/sma3sdb> with uniref90.annot.gz and uniref90.fasta.gz from [www.bioinfocabd.upo.es/sma3s/db](www.bioinfocabd.upo.es/sma3s/db) at first.
+>NOTE3: The '--attool' option will determine which tools are used in the functional annotation step. The default argument '**0**', represents the KOBAS, will connect the KOBAS online server and finsh the annotation process without database configuration in the **<config/>** folder. Nevertheless, argument '**1**' will utilize Sma3s for the annotation. In this case, it's required to complete the local database configuration in <config/sma3sdb> with uniref90.annot.gz and uniref90.fasta.gz from [www.bioinfocabd.upo.es/sma3s/db](www.bioinfocabd.upo.es/sma3s/db) at first.
 
 ### 5.6 report
 
-Type the commands below for rendering HTML-based report.
+Type the command below for rendering HTML-based report.
 
 ```sh
 $ docker exec ppip pipe report --sample ${sample}
@@ -296,7 +296,7 @@ Type *'docker exec ppip pipe denovo -h'* for help.
 | --right seq_2 | Comma-separated list of files containing mate 2s (filename usually includes _2), e.g. --right A_2.fq.gz,B_2.fq.gz. (default: ) |
 | --single seq_u | Comma-separated list of files containing unpaired reads to be assembled, e.g. --single A.fq.gz,B.fq.gz. (default: ) |
 | --max_memory memory | REQUIRED. suggested max memory to use by Trinity where limiting can be enabled. (default: 10G) |
-| --trinity_opts trinity_opts Other options used for assembly by Trinity. (should be put between " ") (For Trinity options check https://github.com/trinityrnaseq/trinityrnaseq/wiki). (default: ) |
+| --trinity_opts trinity_opts | Other options used for assembly by Trinity. (should be put between " ") (For Trinity options check https://github.com/trinityrnaseq/trinityrnaseq/wiki). (default: ) |
 
 ### 7.4 Mass spectra alignment options
 
