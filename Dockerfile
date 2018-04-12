@@ -15,13 +15,14 @@ MAINTAINER Shaohang Xu <xsh.skye@gmail.com>
 ENV DEBIAN_FRONTEND noninteractive
 ENV TRINITY_VERSION 2.6.6
 
-RUN echo "151.101.24.133 assets-cdn.github.com" >>/etc/hosts && \
-	echo "151.101.197.194 github.global.ssl.fastly.net" >>/etc/hosts && \
-	echo "52.74.223.119 www.github.com" >>/etc/hosts
+#*# RUN echo "151.101.24.133 assets-cdn.github.com" >>/etc/hosts && \
+#*#	echo "151.101.197.194 github.global.ssl.fastly.net" >>/etc/hosts && \
+#*#	echo "52.74.223.119 www.github.com" >>/etc/hosts
 
 RUN mv /etc/apt/sources.list /etc/apt/sources.list.bak && \
 	### NOTE: replace the mirror with "http://deb.debian.org/debian/" when tool release.
-    bash -c 'echo -e "deb http://mirrors.163.com/debian/ stable main non-free contrib\n" > /etc/apt/sources.list' && \
+    bash -c 'echo -e "deb http://deb.debian.org/debian/ stable main non-free contrib\n" > /etc/apt/sources.list' && \
+    #*# bash -c 'echo -e "deb http://mirrors.163.com/debian/ stable main non-free contrib\n" > /etc/apt/sources.list' && \
     cat /etc/apt/sources.list
 
 RUN apt-get clean all && \
@@ -40,8 +41,8 @@ RUN apt-get clean all && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN echo 'export PATH=/opt/conda/bin:$PATH' > /etc/profile.d/conda.sh && \
-    wget --quiet https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda2-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
-    #wget --quiet https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
+    #*# wget --quiet https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda2-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
+    wget --quiet https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
     /bin/bash ~/miniconda.sh -b -p /opt/conda && \
         chmod 777 -R /opt/conda/ && \
     rm ~/miniconda.sh
@@ -126,8 +127,8 @@ RUN echo "==> Install compile tools..."  && \
 		rm -rf /var/lib/apt/lists/* /opt/MSGFPlus.zip /tmp/bowtie2-2.3.3.1-linux-x86_64*
 
 #install PhantomJS and casperjs. Taobao registry was uesed in China for net acceleration。
-RUN wget https://npm.taobao.org/dist/phantomjs/phantomjs-2.1.1-linux-x86_64.tar.bz2 -O /tmp/phantomjs-2.1.1-linux-x86_64.tar.bz2 && \
-#*# RUN wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 -O /tmp/phantomjs-2.1.1-linux-x86_64.tar.bz2 && \
+#*# RUN wget https://npm.taobao.org/dist/phantomjs/phantomjs-2.1.1-linux-x86_64.tar.bz2 -O /tmp/phantomjs-2.1.1-linux-x86_64.tar.bz2 && \
+RUN wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 -O /tmp/phantomjs-2.1.1-linux-x86_64.tar.bz2 && \
 	tar xvf /tmp/phantomjs-2.1.1-linux-x86_64.tar.bz2 -C /tmp && \
     cp /tmp/phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/bin/ && \
     cd / && \
@@ -147,17 +148,17 @@ ENV PATH=${TRINITY_HOME}:/home/biouser/.local/bin:${PATH}
 
 USER biouser
 ##NOTE: *** the tsinghua mirror could be deleted ***
-RUN conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
-RUN conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r/
-RUN conda config --set show_channel_urls yes
+#*# RUN conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+#*# RUN conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r/
+#*# RUN conda config --set show_channel_urls yes
 
 #NOTE: r-xml of conda is required for XML of R packages.
 # gcc, gxx(g++) and gfortran is essential for the compilation of MSA. It can be removed after the completion of compilation.
 # Trinity 2.6.6 require the python numpy package.
 RUN	conda install gcc_linux-64 gcc_impl_linux-64 binutils_linux-64 binutils_impl_linux-64 gxx_linux-64 gxx_impl_linux-64 gfortran_impl_linux-64 gfortran_linux-64 \ 
 	petl r=3.4.2 r-ggplot2 r-xml numpy && \
-	#R -e 'source("https://bioconductor.org/biocLite.R"); biocLite(c("Biostrings","data.table","msa","rmarkdown","prettydoc","ggplot2","plotly","kableExtra","treemapify","ggthemes"));' && \
-    R -e 'source("https://bioconductor.org/biocLite.R"); repos <- getOption("repos");repos["CRAN"] <- "https://mirrors.ustc.edu.cn/CRAN/";options(repos = repos); options(BioC_mirror = "https://mirrors.ustc.edu.cn/bioc/");biocLite(c("Biostrings","data.table","msa","rmarkdown","prettydoc","ggplot2","plotly","kableExtra","treemapify","ggthemes"));' && \
+	R -e 'source("https://bioconductor.org/biocLite.R"); biocLite(c("Biostrings","data.table","msa","rmarkdown","prettydoc","ggplot2","plotly","kableExtra","treemapify","ggthemes"));' && \
+    #*# R -e 'source("https://bioconductor.org/biocLite.R"); repos <- getOption("repos");repos["CRAN"] <- "https://mirrors.ustc.edu.cn/CRAN/";options(repos = repos); options(BioC_mirror = "https://mirrors.ustc.edu.cn/bioc/");biocLite(c("Biostrings","data.table","msa","rmarkdown","prettydoc","ggplot2","plotly","kableExtra","treemapify","ggthemes"));' && \
 	conda remove gcc_linux-64 gcc_impl_linux-64 binutils_linux-64 binutils_impl_linux-64 gxx_linux-64 gxx_impl_linux-64 gfortran_impl_linux-64 gfortran_linux-64 && \ 
 	conda clean -y --all && rm -rf /tmp/* 
 
