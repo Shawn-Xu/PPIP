@@ -3,5 +3,4 @@ author: Shaohang Xu
 author_email: xsh.skye@gmail.com
 description: The documentation for endogenous peptide indentification pipeline.
 show_downloads: true
-google_analytics:
 theme: jekyll-theme-modernist
