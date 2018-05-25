@@ -140,7 +140,7 @@ def run_msgfplus(input="", longest=False,
             cmd = TimedExternalCmd(command, logger, raise_exception=True)
             retcode = cmd.run(cmd_log_fd_out=msalign_log_fd, cmd_log=msalign_log, msg=msg, timeout=timeout)
         if os.path.exists("%s/database/%s.ntx.fasta"% (work_msalign, sample)):
-            command = "cp %(dir)s/database/%(sam)s.ntx.fasta %(dir)s/database/%(sam)s.ntx.tab %(out)s/" % {
+            command = "cp %(dir)s/database/%(sam)s.ntx.fasta %(out)s/" % {
                 'dir': work_msalign,
                 'sam': sample,
                 'out': out_database

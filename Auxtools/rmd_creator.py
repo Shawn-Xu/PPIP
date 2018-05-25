@@ -109,6 +109,7 @@ def main():
             "pep": "msalign/%s-pepSummary.tsv" %(args.sample),
             "msa": "annotation/%s-msa.html" %(args.sample),
             "sgp": "annotation/%s-signalP.txt" %(args.sample),
+            "venom": "annotation/%s-venom.tsv" %(args.sample),
             "go": "annotation/%s-go.tsv" %(args.sample),
             "ko": "annotation/%s-ko.tsv" %(args.sample),
             "sma3s_summary": "annotation/%s-sma3s-summary.tsv" % (args.sample),

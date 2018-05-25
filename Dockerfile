@@ -4,7 +4,7 @@ FROM debian
 # Metadata
 LABEl base.image="debian:latest"
 LABEL software="PPIP"
-LABEL software.version="1.0"
+LABEL software.version="1.1.0"
 LABEL description="A dedicated software for identifying endogenous peptides based on peptidomics and RNA-Seq data"
 LABEL documentation="https://github.com/xxxx"
 LABEL license="https://www.gnu.org/licenses/gpl.html"

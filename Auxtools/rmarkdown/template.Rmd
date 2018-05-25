@@ -1,5 +1,5 @@
 ---
-title: "PPIP 1.0 html report"
+title: "PPIP html report"
 date: "`r Sys.Date()`"
 output: 
   prettydoc::html_pretty:
@@ -178,7 +178,7 @@ setDT(d)
 d[,Protein:=gsub(";","<br>", Protein),.(Peptide)]
 d[,PepQValue:=gsub(";","<br>",PepQValue),.(Peptide)]
 knitr::kable(d, "html",escape=F) %>% 
-	kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),full_width = F)  %>%
+	kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),full_width = F,font_size = 12)  %>%
 	scroll_box(height = "30em")
 ```
 
@@ -217,13 +217,43 @@ d %>%
 	  	)) %>% 
 	select(ID, D, isSignal, Dmaxcut, 'Networks-used', Cmax, Ymax, Smax) %>%
 		knitr::kable("html", escape = F) %>%
-		kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),full_width = F) %>% 
+		kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),full_width = F,font_size = 12) %>% 
 		scroll_box(height = "20em")
 ```
 
+## 3.3 Venom annotation
+
+Venoms are substances that are secreted by animals for either defensive or offensive purposes and that have a toxic or harmful effect on other animals. We annotated the endogenous peptides with an open-source and publicly accessible resource for researchers and other individuals interested in venom therapeutics (VenomKB,http://venomkb.org). In the following table,the venom entry related with an endogenous peptide will be merged into one group for presentation.
+
+```{r echo=FALSE, rownames.print=FALSE,warning=FALSE , message=FALSE}
+d<-read.delim("@{venom}",header=T,stringsAsFactors=F)
+sd<-d[,-1]
+pro<-d[,1]
+bool<-grepl("\\w",d$Protein)
+seq<-1:length(bool)
+group<-seq[bool]
+coords<-c(group,length(bool)+1)
+obj<-sd %>% dplyr::mutate(Percentage_identical=cell_spec(
+                                                         Percentage_identical,
+                                                         "html",
+                                                         bold = T,
+                                                         color = spec_color(Percentage_identical, end = 0.9),
+                                                         font_size= spec_font_size(Percentage_identical)
+                                                         )
+                        ) %>%
+                        knitr::kable("html",escape=F)
+#for( i in 1:length(group)){j=i+1; print (paste(coords[i],coords[j]-1))}
+for( i in 1:length(group)){j=i+1; obj<-obj %>% group_rows(pro[coords[i]], coords[i],coords[j]-1, label_row_css = "background-color: #0066CC; color: #fff;")}
+
+obj= obj %>% kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),full_width = F, font_size = 12)  %>%scroll_box(height = "30em")
+obj
+```
+
+[Download the venom annotation file]("@{venom}")
+
 `r if(!params$kobas) {"\\begin{comment}"}`
 
-## 3.3 Functional annotation
+## 3.4 Functional annotation
 
 Gene ontology (GO) is one the fundamental functional classification system. In this sub-section, it was applied to annotate the peptides and illustrated as a treemap below:
 
@@ -258,7 +288,7 @@ d %>%
 			background = spec_color(1:linelimit, end = 0.9, option = "A", direction = -1)
 	  	)) %>% 
 		knitr::kable("html", escape = F) %>%
-		kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),full_width = F) %>% 
+		kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),full_width = F, font_size = 12) %>% 
 		scroll_box(height = "20em")
 ```
 
@@ -268,7 +298,7 @@ d %>%
 
 `r if(!params$sma3s) {"\\begin{comment}"}`
 
-## 3.3 Functional annotation
+## 3.4 Functional annotation
 
 Gene ontology (GO) is one the fundamental functional classification system. In this sub-section, Sma3s was applied to annotate the peptides and the GO statistical chart was illustrated as three treemaps:
 

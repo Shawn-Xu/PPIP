@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 '''
-Version: 1.0
+Version: 1.1.0
 Author: Shaohang Xu
 E-mail: xsh.skye@gmail.com
 '''

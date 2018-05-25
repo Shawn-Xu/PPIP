@@ -3,7 +3,7 @@
 '''
 Version: 1.0
 Author: Shaohang Xu
-E-mail: gmail.com
+E-mail: xsh.skye@gmail.com
 '''
 import sys,argparse
 import subprocess
@@ -30,9 +30,9 @@ def init_opt():
 #-------------------------------------------#
 
 def main():
-    tmpprefix = tempfile.mkdtemp()
-    tmpfa=os.path.join ( tmpprefix + ".fa" )
-    tmpr=os.path.join ( tmpprefix + ".R" )
+    tmpdir = tempfile.mkdtemp()
+    tmpfa=os.path.join ( tmpdir, "tmp.fa" )
+    tmpr=os.path.join ( tmpdir, "tmp.R" )
 
     args=init_opt()
     rscript=textwrap.dedent(r"""
@@ -101,8 +101,9 @@ def main():
     """) % (height))
     if(not args.debug):
         try:
-            os.remove(tmpr)
-            os.remove(tmpfa)
+            #os.remove(tmpr)
+            #os.remove(tmpfa)
+            os.removedirs(tmpdir)
         except OSError:
             pass
 

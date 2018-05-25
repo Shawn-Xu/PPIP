@@ -94,6 +94,21 @@ def annotate_ver1(sample="",start=0,
         logger.info("Skipping step %d: %s"%(step,msg))
     step+=1
 
+    msg = "Venom annotation for %s"%sample
+    if start<=step:
+        logger.info("--------------------------STEP %s--------------------------"%step)
+        command=("python /opt/Auxtools/venomkb/venomkb_annot.py -i %(msdir)s/%(sam)s-sequence.fa "
+                "-c /opt/Auxtools/venomkb/venomkb_proteins_06272017.json.gz -o %(atdir)s/%(sam)s ") % {
+                    'msdir': work_msalign,
+                    'atdir': work_annot,
+                    'sam': sample
+                }
+        command="bash -c \"%s\""%command
+        cmd = TimedExternalCmd(command, logger, raise_exception=True, env_dict={"OMP_NUM_THREADS":str(nthreads)})
+        retcode = cmd.run(cmd_log_fd_out=annot_log_fd, cmd_log=annot_log, msg=msg, timeout=timeout)
+    else:
+        logger.info("Skipping step %d: %s"%(step,msg))
+    step+=1
 
     msg = "Similar sequence blast for %s"%sample
     if start<=step:
@@ -146,7 +161,7 @@ def annotate_ver1(sample="",start=0,
     if start<=step:
         logger.info("--------------------------STEP %s--------------------------"%step)
         if os.path.exists("%s/%s-signalP.txt"% (work_annot,sample)):
-            command = ("cp %(indir)s/%(sam)s-msa.html "
+            command = ("cp %(indir)s/%(sam)s-msa.html %(indir)s/%(sam)s-venom.tsv "
 				"%(indir)s/%(sam)s-signalP.txt %(outdir)s/")%{
 				"indir": work_annot,
 				"sam": sample,
@@ -306,6 +321,21 @@ def annotate_ver2(sample="",start=0,
         logger.info("Skipping step %d: %s"%(step,msg))
     step+=1
 
+    msg = "Venom annotation for %s"%sample
+    if start<=step:
+        logger.info("--------------------------STEP %s--------------------------"%step)
+        command=("python /opt/Auxtools/venomkb_annot.py -i %(msdir)s/%(sam)s-sequence.fa "
+                "-c /opt/Auxtools/proteins_06272017.json.gz -o %(atdir)s/%(sam)s ") % {
+                    'msdir': work_msalign,
+                    'atdir': work_annot,
+                    'sam': sample
+                }
+        command="bash -c \"%s\""%command
+        cmd = TimedExternalCmd(command, logger, raise_exception=True, env_dict={"OMP_NUM_THREADS":str(nthreads)})
+        retcode = cmd.run(cmd_log_fd_out=annot_log_fd, cmd_log=annot_log, msg=msg, timeout=timeout)
+    else:
+        logger.info("Skipping step %d: %s"%(step,msg))
+    step+=1
 
     msg = "Similar sequence blast for %s"%sample
     if start<=step:
@@ -358,7 +388,7 @@ def annotate_ver2(sample="",start=0,
     if start<=step:
         logger.info("--------------------------STEP %s--------------------------"%step)
         if os.path.exists("%s/%s-signalP.txt"% (work_annot,sample)):
-            command = ("cp %(indir)s/%(sam)s-msa.html "
+            command = ("cp %(indir)s/%(sam)s-msa.html %(indir)s/%(sam)s-venom.tsv "
 				"%(indir)s/%(sam)s-signalP.txt %(outdir)s/")%{
 				"indir": work_annot,
 				"sam": sample,
