@@ -102,7 +102,7 @@ def main():
 
         align_parser = parser.add_argument_group("Mass spectra alignment options")
         align_parser.add_argument("--engine", metavar="EngineName",
-                                help="The ms search engine to use.", default="MSGFPlus")
+                help="Set the search engine for MSMS identification: 'MSGFPlus' or 'Comet'. Please note that if you choose the Comet as the engine, the related search parameters can only be modified through the <config/par/comet.params> file.", default="MSGFPlus")
         align_parser.add_argument("--spectrum", metavar="SpectrumFile", dest="spectrum", required=True,
                 help="REQUIRED. Spectrum file name. Currently, MS-GF+ supports the following file formats: mzML, mzXML, mzML, mgf, ms2, pkl and _dta.txt.")
         align_parser.add_argument("--modfile", metavar="FilePath", help=" \
@@ -283,7 +283,7 @@ def main():
 
         whole_parser = parser.add_argument_group("Mass spectra alignment options")
         whole_parser.add_argument("--engine", metavar="EngineName",
-                                help="The ms search engine to use.", default="MSGFPlus")
+                help="Set the search engine for MSMS identification: 'MSGFPlus' or 'Comet'. Please note that if you choose the Comet as the engine, the related search parameters can only be modified through the <config/par/comet.params>", default="MSGFPlus")
         whole_parser.add_argument("--spectrum", metavar="SpectrumFile", dest="spectrum",
                 help="Spectrum file name. Currently, MS-GF+ supports the following file formats: mzML, mzXML, mzML, mgf, ms2, pkl and _dta.txt.")
         whole_parser.add_argument("--modfile", metavar="FilePath", help=" \

@@ -69,6 +69,7 @@ This graph displays a precursor mass error distribution in MS-level. As shown in
 ```{r echo=FALSE,warning=FALSE , message=FALSE}
 #ppm 分布，raw
 setnames(d,"PrecursorError(ppm)","ppm")
+d <- d %>% filter(ppm<=100)  #only keep ppm<=100ppm
 x <- d$ppm
 fit <- density(x)
 
@@ -174,12 +175,20 @@ This table includes the peptide identification result that could be used for fur
 
 ```{r echo=FALSE, rownames.print=FALSE,warning=FALSE , message=FALSE}
 d<-read.delim("@{pep}",header=T,stringsAsFactors=F)
+d <- d %>% arrange(PepQValue,desc(SpecCount)) # reorder
 setDT(d)
 d[,Protein:=gsub(";","<br>", Protein),.(Peptide)]
+d$PepQValue<-as.character(d$PepQValue)   #fixed the bug caused by comet result, its Qvalue is double instead of character.
 d[,PepQValue:=gsub(";","<br>",PepQValue),.(Peptide)]
+
+d<-head(d,n=500) 
 knitr::kable(d, "html",escape=F) %>% 
 	kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),full_width = F,font_size = 12)  %>%
 	scroll_box(height = "30em")
+
+if(dim(d)[1]>500){
+	cat("WARNING: To keep the page fluent, we only show the first 500 peptides. Please refer to the attached TXT file for full results.")	
+}
 ```
 
 [Download the peptide summary](@{pep})
@@ -227,26 +236,30 @@ Venoms are substances that are secreted by animals for either defensive or offen
 
 ```{r echo=FALSE, rownames.print=FALSE,warning=FALSE , message=FALSE}
 d<-read.delim("@{venom}",header=T,stringsAsFactors=F)
-sd<-d[,-1]
-pro<-d[,1]
-bool<-grepl("\\w",d$Protein)
-seq<-1:length(bool)
-group<-seq[bool]
-coords<-c(group,length(bool)+1)
-obj<-sd %>% dplyr::mutate(Percentage_identical=cell_spec(
-                                                         Percentage_identical,
-                                                         "html",
-                                                         bold = T,
-                                                         color = spec_color(Percentage_identical, end = 0.9),
-                                                         font_size= spec_font_size(Percentage_identical)
-                                                         )
-                        ) %>%
-                        knitr::kable("html",escape=F)
+if(dim(d)[1]==0){
+	cat("No matching Venom annotation results!")
+}else{
+	sd<-d[,-1]
+	pro<-d[,1]
+	bool<-grepl("\\w",d$Protein)
+	seq<-1:length(bool)
+	group<-seq[bool]
+	coords<-c(group,length(bool)+1)
+	obj<-sd %>% dplyr::mutate(Percentage_identical=cell_spec(
+															 Percentage_identical,
+															 "html",
+															 bold = T,
+															 color = spec_color(Percentage_identical, end = 0.9),
+															 font_size= spec_font_size(Percentage_identical)
+															 )
+							) %>%
+							knitr::kable("html",escape=F)
 #for( i in 1:length(group)){j=i+1; print (paste(coords[i],coords[j]-1))}
-for( i in 1:length(group)){j=i+1; obj<-obj %>% group_rows(pro[coords[i]], coords[i],coords[j]-1, label_row_css = "background-color: #0066CC; color: #fff;")}
+	for( i in 1:length(group)){j=i+1; obj<-obj %>% group_rows(pro[coords[i]], coords[i],coords[j]-1, label_row_css = "background-color: #0066CC; color: #fff;")}
 
-obj= obj %>% kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),full_width = F, font_size = 12)  %>%scroll_box(height = "30em")
-obj
+	obj= obj %>% kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),full_width = F, font_size = 12)  %>%scroll_box(height = "30em")
+	obj
+}
 ```
 
 [Download the venom annotation file]("@{venom}")

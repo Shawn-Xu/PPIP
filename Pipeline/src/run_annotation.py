@@ -324,8 +324,8 @@ def annotate_ver2(sample="",start=0,
     msg = "Venom annotation for %s"%sample
     if start<=step:
         logger.info("--------------------------STEP %s--------------------------"%step)
-        command=("python /opt/Auxtools/venomkb_annot.py -i %(msdir)s/%(sam)s-sequence.fa "
-                "-c /opt/Auxtools/proteins_06272017.json.gz -o %(atdir)s/%(sam)s ") % {
+        command=("python /opt/Auxtools/venomkb/venomkb_annot.py -i %(msdir)s/%(sam)s-sequence.fa "
+                "-c /opt/Auxtools/venomkb/venomkb_proteins_06272017.json.gz -o %(atdir)s/%(sam)s ") % {
                     'msdir': work_msalign,
                     'atdir': work_annot,
                     'sam': sample

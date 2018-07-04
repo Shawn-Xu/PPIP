@@ -61,13 +61,14 @@ def run_pipeline(args,parser):
         copy_and_overwrite("/opt/Pipeline/par/", "config/par/")
         create_dirs(structure)
 
-        tmpinfo="\nPlease complete the following preparations manually before the pipeline start:\n"+ \
+        tmpinfo="\nPlease complete the following preparation steps before starting the pipeline:\n"+ \
                 "    1) Copy NGS data (*fq.gz) to the <%s>;\n"+\
                 "    2) Copy mass spectra data to the <%s>;\n"+\
-                "    3) Modify the MS-GF+ modification file in the <%s> (If necessary);\n" +\
-                "    4) Copy known protein sequence (e.g. NR, RefSeq, Uniprot) to the <%s> (Recommend).\n" +\
-                "    5) Download the uniref90.annot.gz and uniref90.fasta.gz to the <%s> from www.bioinfocabd.upo.es/sma3s/db (Required if the annotation tool is configured to use Sma3s).\n"
-        logger.info(tmpinfo % (structure[0],structure[1],structure[2], structure[3], structure[4]) )
+                "    3) Modify the 'MSGFPlus_Mods.txt' file appropriately in the <%s> when you set the search engine argument to 'MSGFPlus';\n" +\
+                "    4) Modify the 'comet.params' file appropriately in the <%s> when you set the search engine argument to 'Comet';\n" +\
+                "    5) Copy known protein sequence (e.g. NR, RefSeq, Uniprot) to the <%s> (Recommend).\n" +\
+                "    6) Download the uniref90.annot.gz and uniref90.fasta.gz to the <%s> from www.bioinfocabd.upo.es/sma3s/db (Required if the annotation tool is configured to use Sma3s).\n"
+        logger.info(tmpinfo % (structure[0],structure[1],structure[2], structure[2],structure[3], structure[4]) )
 
     elif mode=="rnaqc":
         run_rna_qc(qctool=args.qctool,fqdir=args.fqdir,
@@ -88,18 +89,25 @@ def run_pipeline(args,parser):
                 workdir=args.workdir, outdir=args.outdir, timeout=args.timeout)
 
     elif mode=="msalign":
-        if not args.engine.upper()=="MSGFPLUS":
+        if args.engine.upper()=="MSGFPLUS":
+            logger.info("Running mass spectra alignment step using %s"%args.engine)
+            run_ms_aligner(engine=args.engine,
+                    input=args.input, longest=args.get_longest,
+                    spectrum=args.spectrum, instrument=args.instrument, enzyme=args.enzyme, fragid=args.fragid,
+                    decoy=args.decoy, pretol=args.pretol, minlen=args.minlen, maxlen=args.maxlen, modfile=args.modfile, ntt=args.ntt,
+                    start=args.start, sample= args.sample, nthreads=args.threads,
+                    msgfplus_opts=args.msgfplus_opts, max_mem=args.max_mem,
+                    workdir=args.workdir, outdir=args.outdir, timeout=args.timeout)
+        elif args.engine.upper()=="COMET":
+            logger.info("Running mass spectra alignment step using %s"%args.engine)
+            run_ms_aligner(engine=args.engine,
+                    input=args.input, longest=args.get_longest,spectrum=args.spectrum,
+                    start=args.start, sample= args.sample, nthreads=args.threads,
+                    workdir=args.workdir, outdir=args.outdir, timeout=args.timeout)
+        else:
             logger.error("%s is not supported. \
                     \nThe supported mass spectra aligner(s) are: %s."%(args.engine,MS_ALIGNER))
             return os.EX_USAGE
-        logger.info("Running mass spectra alignment step using %s"%args.engine)
-        run_ms_aligner(engine=args.engine,
-                input=args.input, longest=args.get_longest,
-                spectrum=args.spectrum, instrument=args.instrument, enzyme=args.enzyme, fragid=args.fragid,
-                decoy=args.decoy, pretol=args.pretol, minlen=args.minlen, maxlen=args.maxlen, modfile=args.modfile, ntt=args.ntt,
-                start=args.start, sample= args.sample, nthreads=args.threads,
-                msgfplus_opts=args.msgfplus_opts, max_mem=args.max_mem,
-                workdir=args.workdir, outdir=args.outdir, timeout=args.timeout)
 
     elif mode=="annotate":
         logger.info("Running polypeptides annotation step")
