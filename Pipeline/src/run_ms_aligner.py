@@ -210,7 +210,7 @@ def run_comet(input="", longest=False, spectrum="",
     msg = "Run Comet for %s"%sample
     if start<=step:
         logger.info("--------------------------STEP %s--------------------------"%step)
-        command=("/opt/comet.2018011.linux.exe -Pconfig/par/comet.params -N%(dir)s/%(sam)s "
+        command=("/opt/comet.2018012.linux.exe -Pconfig/par/comet.params -N%(dir)s/%(sam)s "
                 "-D%(dir)s/database/%(sam)s.ntx.fasta  %(spectrum)s ") % {
                         'spectrum': spectrum,
                         'dir':work_msalign,

@@ -21,8 +21,8 @@ ENV TRINITY_VERSION 2.6.6
 
 RUN mv /etc/apt/sources.list /etc/apt/sources.list.bak && \
 	### NOTE: replace the mirror with "http://deb.debian.org/debian/" when tool release.
-    bash -c 'echo -e "deb http://deb.debian.org/debian/ stable main non-free contrib\n" > /etc/apt/sources.list' && \
-    #*# bash -c 'echo -e "deb http://mirrors.163.com/debian/ stable main non-free contrib\n" > /etc/apt/sources.list' && \
+    #*# bash -c 'echo -e "deb http://deb.debian.org/debian/ stable main non-free contrib\n" > /etc/apt/sources.list' && \
+    bash -c 'echo -e "deb http://mirrors.163.com/debian/ stable main non-free contrib\n" > /etc/apt/sources.list' && \
     cat /etc/apt/sources.list
 
 RUN apt-get clean all && \
@@ -41,8 +41,8 @@ RUN apt-get clean all && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN echo 'export PATH=/opt/conda/bin:$PATH' > /etc/profile.d/conda.sh && \
-    #*# wget --quiet https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda2-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
-    wget --quiet https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
+    wget --quiet https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda2-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
+    #*# wget --quiet https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
     /bin/bash ~/miniconda.sh -b -p /opt/conda && \
         chmod 777 -R /opt/conda/ && \
     rm ~/miniconda.sh
@@ -68,7 +68,6 @@ ADD Pipeline/ /opt/Pipeline
 
 ### install Trinity
 #pandoc is essential for rmarkdown
-#ADD Trinity-v${TRINITY_VERSION}.tar.gz /tmp/
 RUN mv /opt/Pipeline/pipe ${BIN} && chmod +x /usr/local/bin/pipe && \
 	echo "==> Install compile tools..."  && \
 		apt-get update && apt-get install -y --no-install-recommends \
@@ -81,25 +80,25 @@ RUN mv /opt/Pipeline/pipe ${BIN} && chmod +x /usr/local/bin/pipe && \
 				rsync && \
 
 	echo "==> Download, compile, and install ..."  && \  
-		wget https://github.com/samtools/samtools/releases/download/1.7/samtools-1.7.tar.bz2 -O /tmp/samtools-1.7.tar.bz2 && \
-		#wget http://192.168.1.2:6677/dl/samtools-1.7.tar.bz2 -O /tmp/samtools-1.7.tar.bz2 && \
+		#wget https://github.com/samtools/samtools/releases/download/1.7/samtools-1.7.tar.bz2 -O /tmp/samtools-1.7.tar.bz2 && \
+		wget http://192.168.1.2:6677/dl/samtools-1.7.tar.bz2 -O /tmp/samtools-1.7.tar.bz2 && \
 		tar xvf /tmp/samtools-1.7.tar.bz2 -C /tmp/ && \
 		cd /tmp/samtools-1.7/ && \
 		./configure && make && make install && \
 		rm -rf /tmp/samtools-1.7/ && \
-		wget https://github.com/gmarcais/Jellyfish/releases/download/v2.2.7/jellyfish-2.2.7.tar.gz -O /tmp/jellyfish-2.2.7.tar.gz && \
-		#wget http://192.168.1.2:6677/dl/jellyfish-2.2.7.tar.gz -O /tmp/jellyfish-2.2.7.tar.gz && \
+		#wget https://github.com/gmarcais/Jellyfish/releases/download/v2.2.7/jellyfish-2.2.7.tar.gz -O /tmp/jellyfish-2.2.7.tar.gz && \
+		wget http://192.168.1.2:6677/dl/jellyfish-2.2.7.tar.gz -O /tmp/jellyfish-2.2.7.tar.gz && \
 		tar xvf /tmp/jellyfish-2.2.7.tar.gz -C /tmp/ && \
 		cd /tmp/jellyfish-2.2.7/ && \
 		./configure && make && make install && \
 		rm -rf /tmp/jellyfish-2.2.7/ && \
-		wget https://github.com/COMBINE-lab/salmon/releases/download/v0.9.1/Salmon-0.9.1_linux_x86_64.tar.gz -O /opt/Salmon-0.9.1_linux_x86_64.tar.gz && \
-		#wget http://192.168.1.2:6677/dl/Salmon-0.9.1_linux_x86_64.tar.gz -O /opt/Salmon-0.9.1_linux_x86_64.tar.gz && \
+		#wget https://github.com/COMBINE-lab/salmon/releases/download/v0.9.1/Salmon-0.9.1_linux_x86_64.tar.gz -O /opt/Salmon-0.9.1_linux_x86_64.tar.gz && \
+		wget http://192.168.1.2:6677/dl/Salmon-0.9.1_linux_x86_64.tar.gz -O /opt/Salmon-0.9.1_linux_x86_64.tar.gz && \
 		cd /opt/ && tar xvf Salmon-0.9.1_linux_x86_64.tar.gz && \
 		ln -s /opt/Salmon-latest_linux_x86_64/bin/salmon $BIN/.  && \
 	echo "==> Download, compile, and install..."  && \  
-		wget "https://github.com/trinityrnaseq/trinityrnaseq/archive/Trinity-v${TRINITY_VERSION}.tar.gz" -O /tmp/Trinity-v${TRINITY_VERSION}.tar.gz  && \ 
-		#wget http://192.168.1.2:6677/dl/Trinity-v${TRINITY_VERSION}.tar.gz -O /tmp/Trinity-v${TRINITY_VERSION}.tar.gz  && \
+		#wget "https://github.com/trinityrnaseq/trinityrnaseq/archive/Trinity-v${TRINITY_VERSION}.tar.gz" -O /tmp/Trinity-v${TRINITY_VERSION}.tar.gz  && \ 
+		wget http://192.168.1.2:6677/dl/Trinity-v${TRINITY_VERSION}.tar.gz -O /tmp/Trinity-v${TRINITY_VERSION}.tar.gz  && \
 		tar xvf /tmp/Trinity-v${TRINITY_VERSION}.tar.gz -C /tmp/ && \
 		cd /tmp/trinityrnaseq-Trinity-v${TRINITY_VERSION}/ && \
 		make && \
@@ -117,25 +116,25 @@ RUN echo "==> Install compile tools..."  && \
 		apt-get update && apt-get install -y --no-install-recommends \
 				unzip && \
 	echo "==> Download, compile, and install..."  && \  
-		wget https://omics.pnl.gov/sites/default/files/MSGFPlus.zip -O /opt/MSGFPlus.zip && \
-		#wget http://192.168.1.2:6677/dl/MSGFPlus.zip -O /opt/MSGFPlus.zip  && \
+		#wget https://omics.pnl.gov/sites/default/files/MSGFPlus.zip -O /opt/MSGFPlus.zip && \
+		wget http://192.168.1.2:6677/dl/MSGFPlus.zip -O /opt/MSGFPlus.zip  && \
 		cd /opt && unzip MSGFPlus.zip -d MSGFPlus && \
 		cd /tmp && \
-		wget https://sourceforge.net/projects/bowtie-bio/files/bowtie2/2.3.3.1/bowtie2-2.3.3.1-linux-x86_64.zip/download -O /tmp/bowtie2-2.3.3.1-linux-x86_64.zip && \
-		#wget http://192.168.1.2:6677/dl/bowtie2-2.3.3.1-linux-x86_64.zip -O /tmp/bowtie2-2.3.3.1-linux-x86_64.zip  && \
+		#wget https://sourceforge.net/projects/bowtie-bio/files/bowtie2/2.3.3.1/bowtie2-2.3.3.1-linux-x86_64.zip/download -O /tmp/bowtie2-2.3.3.1-linux-x86_64.zip && \
+		wget http://192.168.1.2:6677/dl/bowtie2-2.3.3.1-linux-x86_64.zip -O /tmp/bowtie2-2.3.3.1-linux-x86_64.zip  && \
 		unzip bowtie2-2.3.3.1-linux-x86_64.zip && \
 		mv /tmp/bowtie2-2.3.3.1-linux-x86_64/bowtie2*  $BIN && \
-		wget https://excellmedia.dl.sourceforge.net/project/comet-ms/comet_2018011.zip -O /opt/comet_2018011.zip && \
-		#wget http://192.168.1.2:6677/dl/comet_2018011.zip -O /opt/comet_2018011.zip  && \
-		cd /opt && unzip comet_2018011.zip comet.2018011.linux.exe && chmod +x comet.2018011.linux.exe && \
+		#wget https://excellmedia.dl.sourceforge.net/project/comet-ms/comet_2018012.zip -O /opt/comet_2018012.zip && \
+		wget http://192.168.1.2:6677/dl/comet_2018012.zip -O /opt/comet_2018012.zip  && \
+		cd /opt && unzip comet_2018012.zip comet.2018012.linux.exe && chmod +x comet.2018012.linux.exe && \
 	echo "==> Clean up..."  && \   
 		apt-get remove -y --auto-remove unzip && \
 		apt-get clean                                  && \   
-		rm -rf /var/lib/apt/lists/* /opt/MSGFPlus.zip /tmp/bowtie2-2.3.3.1-linux-x86_64* /opt/comet_2018011.zip
+		rm -rf /var/lib/apt/lists/* /opt/MSGFPlus.zip /tmp/bowtie2-2.3.3.1-linux-x86_64* /opt/comet_2018012.zip
 
 #install PhantomJS and casperjs. Taobao registry was uesed in China for net acceleration。
-#*# RUN wget https://npm.taobao.org/dist/phantomjs/phantomjs-2.1.1-linux-x86_64.tar.bz2 -O /tmp/phantomjs-2.1.1-linux-x86_64.tar.bz2 && \
-RUN wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 -O /tmp/phantomjs-2.1.1-linux-x86_64.tar.bz2 && \
+RUN wget https://npm.taobao.org/dist/phantomjs/phantomjs-2.1.1-linux-x86_64.tar.bz2 -O /tmp/phantomjs-2.1.1-linux-x86_64.tar.bz2 && \
+#*# RUN wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 -O /tmp/phantomjs-2.1.1-linux-x86_64.tar.bz2 && \
 	tar xvf /tmp/phantomjs-2.1.1-linux-x86_64.tar.bz2 -C /tmp && \
     cp /tmp/phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/bin/ && \
     cd / && \
@@ -164,8 +163,8 @@ RUN conda config --set show_channel_urls yes
 # Trinity 2.6.6 require the python numpy package.
 RUN	conda install gcc_linux-64 gcc_impl_linux-64 binutils_linux-64 binutils_impl_linux-64 gxx_linux-64 gxx_impl_linux-64 gfortran_impl_linux-64 gfortran_linux-64 \ 
 	petl r=3.4.2 r-ggplot2 r-xml numpy && \
-	R -e 'source("https://bioconductor.org/biocLite.R"); biocLite(c("Biostrings","data.table","msa","rmarkdown","prettydoc","ggplot2","plotly","kableExtra","treemapify","ggthemes"));' && \
-    #*# R -e 'options(useHTTPS=FALSE, BioC_mirror="http://bioconductor.org");source("http://bioconductor.org/biocLite.R"); repos <- getOption("repos");repos["CRAN"] <- "https://mirrors.ustc.edu.cn/CRAN/";options(repos = repos); options(BioC_mirror = "https://mirrors.ustc.edu.cn/bioc/");biocLite(c("Biostrings","data.table","msa","rmarkdown","prettydoc","ggplot2","plotly","kableExtra","treemapify","ggthemes"));' && \
+	#*# R -e 'source("https://bioconductor.org/biocLite.R"); biocLite(c("Biostrings","data.table","msa","rmarkdown","prettydoc","ggplot2","plotly","kableExtra","treemapify","ggthemes"));' && \
+    R -e 'options(useHTTPS=FALSE, BioC_mirror="http://bioconductor.org");source("http://bioconductor.org/biocLite.R"); repos <- getOption("repos");repos["CRAN"] <- "https://mirrors.ustc.edu.cn/CRAN/";options(repos = repos); options(BioC_mirror = "https://mirrors.ustc.edu.cn/bioc/");biocLite(c("Biostrings","data.table","msa","rmarkdown","prettydoc","ggplot2","plotly","kableExtra","treemapify","ggthemes"));' && \
 	conda remove gcc_linux-64 gcc_impl_linux-64 binutils_linux-64 binutils_impl_linux-64 gxx_linux-64 gxx_impl_linux-64 gfortran_impl_linux-64 gfortran_linux-64 && \ 
 	conda clean -y --all && rm -rf /tmp/* 
 

@@ -12,7 +12,7 @@ The demo data of this software can be downloaded from Google Drive. A MGF file a
 
 Furthermore, we also provided two NCBI non-redundant protein sequence databases for the Blast annotation step. These two database were processed well in advance and divied into two categories: *Plant.fa* and *Animal.fa*. Users can select the appropriate database according to the actual situation. Of course, users also can customize their Blast database from another public source (e.g. [UniProt](http://www.uniprot.org/)).
 
-[Click me to obtain demo data from Google Drive](https://drive.google.com/open?id=1tprERIRcRpK8Ngktom6w5V5XQoSM0jte). There are three files in the directory:
+[Click here to obtain demo data from Google Drive](https://drive.google.com/open?id=1tprERIRcRpK8Ngktom6w5V5XQoSM0jte). There are three files in the directory:
   1. *<font color="#5FA90A">PPIP_data.tar.gz</font>*: demo data of RNA-seq and MS2. 
   2. *<font color="#5FA90A">animal.fa.gz</font>*: animal sequences from NCBI non-redundant database for Blast.
   3. *<font color="#5FA90A">Plannt.fa.gz</font>*: plant sequences from NCBI non-redundant database for Blast.
@@ -104,18 +104,20 @@ $ tree ${pw}
 │   ├── fastq                      # the folder of RNA-seq fastq files used for denovo.
 │   ├── msraw                      # the folder of MS2 files for 'msalign' step.
 │   └── par                        # parameters folder
-│        └── MSGFPlus_Mods.txt     # the MS-GF+ configuration for modification.
+│       ├── MSGFPlus_Mods.txt     # the MS-GF+ configuration for modification.
+│       └── comet.params          # the Comet parameter configuration.
 ├── out                             # the folder of final result
 └── work                            # the scratch directory for working
 ```
 
 Before the software start to run, we need to prepare the raw data or configuration files according to the following items:
 
-- a) Copy NGS data (*fq.gz) to the <config/fastq>;
-- b) Copy mass spectra data to the <config/msraw>;
-- c) Modify the MS-GF+ modification file in the <config/par> (If necessary);
-- d) Copy known protein sequence (e.g. NR, RefSeq, Uniprot) to the <config/blastdb> (Recommend).
-- e) Download the uniref90.annot.gz and uniref90.fasta.gz to the <config/sma3sdb> from www.bioinfocabd.upo.es/sma3s/db (Required if the annotation tool is configured to use Sma3s).
+- 1) Copy NGS data (*fq.gz) to the <config/fastq>;
+- 2) Copy mass spectra data to the <config/msraw>;
+- 3) Modify the 'MSGFPlus_Mods.txt' file appropriately in the <config/par> when you set the search engine argument to 'MSGFPlus';
+- 4) Modify the 'comet.params' file appropriately in the <config/par> when you set the search engine argument to 'Comet';
+- 5) Copy known protein sequence (e.g. NR, RefSeq, Uniprot) to the <config/blastdb> (Recommend);
+- 6) Download the uniref90.annot.gz and uniref90.fasta.gz to the <config/sma3sdb> from www.bioinfocabd.upo.es/sma3s/db (Required if the annotation tool is configured to use Sma3s).
 
 >NOTE1: The input mass spectra formats can be mzML, mzXML, mzML, mgf, ms2, pkl and _dta.txt. In many case, [msconvert](http://proteowizard.sourceforge.net/tools/msconvert.html) can be used to convert all common raw formats into those open data formats described before.
 
@@ -134,7 +136,8 @@ $ tree ${pw}
 │   ├── msraw
 │   │   └── demo.mgf
 │   └── par
-│        └── MSGFPlus_Mods.txt
+│       ├── MSGFPlus_Mods.txt
+│       └── comet.params
 ├── out
 └── work
 ```
@@ -152,7 +155,8 @@ $ tree ${pw}
 │   ├── msraw
 │   │   └── demo.mgf
 │   ├── par
-│   │   └── MSGFPlus_Mods.txt
+│   │   ├── MSGFPlus_Mods.txt
+│   │   └── comet.params
 │   └── sma3sdb
 │       ├── uniref90.annot
 │       └── uniref90.fasta
@@ -182,10 +186,16 @@ When completed, Trinity will create a **Trinity.fasta** file in the **<work/trin
 
 ### 5.4 msalign
 
-Type the command below for peptide identification by scoring MS/MS spectra against database.
+This command will choose MS-GF+ as the search engine for peptide identification.
 
 ```sh
-$ docker exec ppip pipe msalign --input work/trinity/Trinity.fasta --sample ${sample} --spectrum config/msraw/demo.mgf --modfile config/par/MSGFPlus_Mods.txt --threads 8
+$ docker exec ppip pipe msalign --input work/trinity/Trinity.fasta --sample ${sample} --spectrum config/msraw/demo.mgf --threads 8
+```
+
+Besides, you can choose Comet as the alternative search engine by setting '--engine Comet'. Please note that the parameters of Comet could only be modified through <config/par/comet.params>.
+
+```sh
+$ docker exec ppip pipe msalign --engine Comet --input work/trinity/Trinity.fasta --sample ${sample} --spectrum config/msraw/demo.mgf --threads 8
 ```
 
 The corresponding result will be stored in the **<work/msalign/>** folder.
@@ -244,7 +254,7 @@ docker exec ppip pipe all --threads 10 --max_memory 20G --sample Scorpion --frag
 | 2 | Quality control of raw reads | rnaqc | one QC report and clean reads |	
 | 3 | Short-read de novo assembly | denovo | one trasncripts file named "Trinity.fasta" |
 | 4 | Peptide identification by scoring MS/MS spectra against database | msalign | mzIdentML and tsv list |
-| 5 | Function annotion, motif search, signal peptides prediction ... ...  | annotate | (1) <sample>-go.tsv, gene ontology annotation; (2) <sample>-ko.tsv, pathway annotation; (3) <sample>-msa.html, multiple sequence alignment viewer; (4) <sample>-signalP.txt, signal peptides predict result; (5) blast_html/, the similarity protein sequence search result links. |
+| 5 | Function annotion, motif search, signal peptides prediction ... ...  | annotate | (1) <sample>-go.tsv, gene ontology annotation; (2) <sample>-ko.tsv, pathway annotation; (3) <sample>-msa.html, multiple sequence alignment viewer; (4) <sample>-signalP.txt, signal peptides predict result; (5) blast_html/, the similarity protein sequence search result links; (6) <sample>-venom.tsv, venom annotation |
 | 6 | Tidy the result and build the HTML-based report | report | A folder contains a HTML-report |
 
 Alternatively, you can also simplely use a interface **all** to automaticly run the steps from order 2 to 6 at once.
@@ -314,9 +324,9 @@ Type *'docker exec ppip pipe msalign -h'* for help.
 
 | Option | Definition |
 | ------ | ------ |
-| --engine EngineName | The ms search engine to use. (default: MSGFPlus) |
+| --engine EngineName | Set the search engine for MSMS identification: 'MSGFPlus' or 'Comet'. Please note that if you choose the Comet as the engine, the related search parameters can only be modified through the <config/par/comet.params> file. (default: MSGFPlus) |
 | --spectrum SpectrumFile | REQUIRED. Spectrum file name. Currently, MS-GF+ supports the following file formats: mzML, mzXML, mzML, mgf, ms2, pkl and _dta.txt. (default: None) |
-| --modfile FilePath | Modification file of MS-GF+. (default: config/par/MSGFPlus_Mods.txt) |
+| --modfile FilePath | Modification file of MS-GF+. For more details, please check: https://github.com/sangtaekim/msgfplus/blob/master/doc/examples/Mods.txt (default: config/par/MSGFPlus_Mods.txt) |
 | --max_memory max_memory | suggested max memory to use by MS-GF+ where limiting can be enabled. (default: 10G) |
 | --inst MS2DetectorID | MS detector. Currently, MS-GF+ supports the following detectors: 0: Low-res LCQ/LTQ, 1: Orbitrap/FTICR, 2: TOF, 3: Q-Exactive. (default: 3) |
 | --fragid FragmentMethodID | Fragmentation method identifier (used to determine the scoring model). 0: as written in the spectrum or CID if no info (Default), 1: CID, 2: ETD, 3: HCD, 4: Merge spectra from the same precursor (default: 0) |
