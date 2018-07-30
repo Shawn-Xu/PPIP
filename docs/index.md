@@ -254,7 +254,7 @@ docker exec ppip pipe all --threads 10 --max_memory 20G --sample Scorpion --frag
 | 2 | Quality control of raw reads | rnaqc | one QC report and clean reads |	
 | 3 | Short-read de novo assembly | denovo | one trasncripts file named "Trinity.fasta" |
 | 4 | Peptide identification by scoring MS/MS spectra against database | msalign | mzIdentML and tsv list |
-| 5 | Function annotion, motif search, signal peptides prediction ... ...  | annotate | (1) <sample>-go.tsv, gene ontology annotation; (2) <sample>-ko.tsv, pathway annotation; (3) <sample>-msa.html, multiple sequence alignment viewer; (4) <sample>-signalP.txt, signal peptides predict result; (5) blast_html/, the similarity protein sequence search result links; (6) <sample>-venom.tsv, venom annotation |
+| 5 | Function annotion, motif search, signal peptides prediction ... ...  | annotate | (1) sample-go.tsv, gene ontology annotation; (2) sample-ko.tsv, pathway annotation; (3) sample-msa.html, multiple sequence alignment viewer; (4) sample-signalP.txt, signal peptides predict result; (5) blast_html/, the similarity protein sequence search result links; (6) sample-venom.tsv, venom annotation |
 | 6 | Tidy the result and build the HTML-based report | report | A folder contains a HTML-report |
 
 Alternatively, you can also simplely use a interface **all** to automaticly run the steps from order 2 to 6 at once.
