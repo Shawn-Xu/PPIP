@@ -23,7 +23,7 @@ A demo report which is generated after completing the entire process can be view
 
 ***
 
-## 3 Minimum system requirements to run PPIP natively in Linux, Windows or Mac:
+## 3 Minimum system requirements to run PPIP natively in Linux or Mac:
 
 - RAM: 10 GB (more is better)
 - Processor: 1+ CPU (more is better)
@@ -34,9 +34,7 @@ Also, you must enable Intel VT-x and AMD-V in your BIOS. Many people will alread
 
 [How to Enable Intel VT-x in Your Computer’s BIOS or UEFI Firmware](http://www.howtogeek.com/213795/how-to-enable-intel-vt-x-in-your-computers-bios-or-uefi-firmware/)
 
-If you are going to run this image in Windows system, it requires Microsoft Windows 10 Professional or Enterprise 64-bit. More detail could be found in :
-
-[Install Docker for Windows](https://docs.docker.com/docker-for-windows/install/)
+Currently, it's possible that the Docker for Windows will trigger "input/output error" IO error when you run the PPIP container with large fastq files. This problem may be caused by the docker mount system in windows NTFS partions and couldn't be fixed for the moment. So we recommend running this program primarily on Linux..
 
 ***
 
