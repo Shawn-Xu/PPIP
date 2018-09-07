@@ -97,7 +97,8 @@ def main():
     p=subprocess.Popen("bash -c \"%s\"" % (command), shell=True)
     p.wait()
 
-    once_print={}   #temp dict for print id only once.
+    entry_count={}
+    unique={}
     final=open(args.outprefix+"-venom.tsv", 'w')
     final.write("Protein\tVenomkb_id\tPercentage_identical\tExpect_value\tVenom_name\tVenomkb_link\n")
     for line in open("venom-tabular.txt"):
@@ -105,11 +106,17 @@ def main():
         if float(elem[2])<80:  # only display the query of identical matches >= 80%.
             continue
         #final.write("%s\t%s\t%s\t%s\t%s\t%s\n" %(elem[0],elem[1],elem[2],elem[10],venom_name_dict[elem[1]],"http://venomkb.org/"+elem[1]) )
-        if(elem[0] in once_print):
-            final.write("%s\t%s\t%s\t%s\t%s\t%s\n" %(" ",elem[1],elem[2],elem[10],venom_name_dict[elem[1]],"http://venomkb.org/"+elem[1]) )
-        else:
+        if (elem[0],elem[1]) in unique:
+            continue
+        if elem[0] in entry_count and entry_count[elem[0]]>4:
+            continue
+        if elem[0] not in entry_count:
             final.write("%s\t%s\t%s\t%s\t%s\t%s\n" %(elem[0],elem[1],elem[2],elem[10],venom_name_dict[elem[1]],"http://venomkb.org/"+elem[1]) )
-            once_print[elem[0]]=1
+            entry_count[elem[0]]=1
+        else:
+            final.write("%s\t%s\t%s\t%s\t%s\t%s\n" %(" ",elem[1],elem[2],elem[10],venom_name_dict[elem[1]],"http://venomkb.org/"+elem[1]) )
+            entry_count[elem[0]]+=1
+        unique[(elem[0],elem[1])]=True
     final.close()
     
     if(not args.debug):

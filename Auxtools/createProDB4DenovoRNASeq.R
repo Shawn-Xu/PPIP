@@ -12,6 +12,7 @@ library(Biostrings)
 #' raw sequences with 3-frame (forward). Default is 6-frame translation (FALSE).
 #' @param outmtab A txt format file containing the novel transcripts information
 #' @param outfa The output fasta format protein sequence file 
+#' @param aalimit The minimum amino acid length of effective open-read frame, default threshold is 30. 
 #' @param bool_get_longest When it's set as TRUE, only the longest protein sequences will be 
 #' retained after the raw sequences are translated with 3-frame or 6-frame. 
 #' Otherwise, all the protein sequences with longer than 30 aa will be retained.
@@ -30,6 +31,7 @@ createProDB4DenovoRNASeq<-function(infa="./trinity.fasta",
                        bool_get_longest=TRUE,
                        make_decoy=FALSE,
                        decoy_tag="#REV#",
+					   aalimit=30,
                        outfile_name="test"){
     options(stringsAsFactors=FALSE)
     if(file.exists(outfa)){
@@ -49,9 +51,9 @@ createProDB4DenovoRNASeq<-function(infa="./trinity.fasta",
     peptides_f3<-suppressWarnings(translate(subseq(dna_seq_forward,start=3),
                                             if.fuzzy.codon="solve"))  
     
-    novel_cds_f1 <- .get_30aa_splited_seq(peptides_f1)
-    novel_cds_f2 <- .get_30aa_splited_seq(peptides_f2)
-    novel_cds_f3 <- .get_30aa_splited_seq(peptides_f3)   
+    novel_cds_f1 <- .get_aa_splited_seq(peptides_f1,aalimit)
+    novel_cds_f2 <- .get_aa_splited_seq(peptides_f2,aalimit)
+    novel_cds_f3 <- .get_aa_splited_seq(peptides_f3,aalimit)   
     novel_cds_f1[,c("Strand","Frame","ID"):=list(a="+",
                                                  b="1",
                                                  c=paste(id,"+","F1",
@@ -83,9 +85,9 @@ createProDB4DenovoRNASeq<-function(infa="./trinity.fasta",
                                                 if.fuzzy.codon="solve"))
         peptides_r3<-suppressWarnings(translate(subseq(dna_seq_reverse,start=3),
                                                 if.fuzzy.codon="solve"))
-        novel_cds_r1 <- .get_30aa_splited_seq(peptides_r1)
-        novel_cds_r2 <- .get_30aa_splited_seq(peptides_r2)
-        novel_cds_r3 <- .get_30aa_splited_seq(peptides_r3)   
+        novel_cds_r1 <- .get_aa_splited_seq(peptides_r1,aalimit)
+        novel_cds_r2 <- .get_aa_splited_seq(peptides_r2,aalimit)
+        novel_cds_r3 <- .get_aa_splited_seq(peptides_r3,aalimit)   
         novel_cds_r1[,c("Strand","Frame","ID"):=list(a="-",
                                                      b="1",
                                                      c=paste(id,"-","F1",
@@ -175,7 +177,7 @@ createProDB4DenovoRNASeq<-function(infa="./trinity.fasta",
     }
 }
 
-.get_30aa_splited_seq<-function(translated_seq){
+.get_aa_splited_seq<-function(translated_seq,aalimit=30){
     df<-as.data.frame(translated_seq)
     df["id"]<-rownames(df)
     colnames(df)<-c("raw","id")
@@ -187,7 +189,7 @@ createProDB4DenovoRNASeq<-function(infa="./trinity.fasta",
     dt_split[, c("start","end"):=list(cumlen-nchar(seq),cumlen-1L), 
              by=list(id, raw)]
     #remove the pep less than 30AA .
-    sub.dt_split<-subset(dt_split,(end-start)>=29)  
+    sub.dt_split<-subset(dt_split,(end-start)>=aalimit-1)  
     #add column "Substring"
     sub.dt_split[,Substring:=seq(1,.N),by=.(id,raw)] 
     sub.dt_split

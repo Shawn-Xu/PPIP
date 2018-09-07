@@ -1,45 +1,15 @@
 Protein	Venomkb_id	Percentage_identical	Expect_value	Venom_name	Venomkb_link
 NTX14137	P4592344	100.000	2.29e-25	BmK-YA precursor	http://venomkb.org/P4592344
- 	P4592344	97.619	8.62e-25	BmK-YA precursor	http://venomkb.org/P4592344
- 	P4592344	97.619	8.62e-25	BmK-YA precursor	http://venomkb.org/P4592344
- 	P4592344	95.238	4.01e-24	BmK-YA precursor	http://venomkb.org/P4592344
- 	P4592344	95.238	7.81e-24	BmK-YA precursor	http://venomkb.org/P4592344
- 	P4592344	95.238	7.81e-24	BmK-YA precursor	http://venomkb.org/P4592344
- 	P4592344	92.857	2.93e-23	BmK-YA precursor	http://venomkb.org/P4592344
- 	P4592344	82.759	4.73e-11	BmK-YA precursor	http://venomkb.org/P4592344
 NTX41956	P4943114	91.379	8.06e-35	Toxin BmKITc	http://venomkb.org/P4943114
  	P3077021	86.207	1.73e-32	Anti-neuroexcitation peptide 2	http://venomkb.org/P3077021
  	P7736827	85.965	9.25e-32	Beta-insect depressant toxin LqhIT2	http://venomkb.org/P7736827
  	P1990136	85.965	1.14e-31	Insect toxin 2-53	http://venomkb.org/P1990136
  	P2415271	82.759	1.24e-31	Beta-insect depressant toxin BmKITa	http://venomkb.org/P2415271
- 	P8255564	84.483	2.20e-31	Neurotoxin BmKAEP2	http://venomkb.org/P8255564
- 	P3706610	84.483	3.30e-31	Depressant insect toxin BmK ITa1	http://venomkb.org/P3706610
- 	P5127212	82.759	4.74e-31	Beta-insect depressant toxin BmKITb	http://venomkb.org/P5127212
- 	P0314897	82.759	6.11e-31	Anti-neuroexcitation peptide 3	http://venomkb.org/P0314897
- 	P1446795	82.759	6.52e-31	Depressant scorpion toxin BmKIM	http://venomkb.org/P1446795
- 	P0517870	82.759	1.97e-30	Toxin BmKIT3	http://venomkb.org/P0517870
- 	P7331272	85.455	1.19e-29	Beta-insect depressant toxin BotIT4	http://venomkb.org/P7331272
- 	P2906605	85.455	1.19e-29	Beta-insect depressant toxin BaIT2	http://venomkb.org/P2906605
- 	P2923788	85.455	1.28e-29	Beta-insect depressant toxin BotIT5	http://venomkb.org/P2923788
- 	P4338962	83.333	1.58e-29	Beta-insect depressant toxin LqqIT2	http://venomkb.org/P4338962
- 	P6179056	81.034	2.26e-29	Beta-insect depressant toxin BmKIT4	http://venomkb.org/P6179056
 NTX41957	P2415271	96.552	8.45e-38	Beta-insect depressant toxin BmKITa	http://venomkb.org/P2415271
  	P3077021	96.552	1.40e-37	Anti-neuroexcitation peptide 2	http://venomkb.org/P3077021
  	P3706610	96.552	8.75e-37	Depressant insect toxin BmK ITa1	http://venomkb.org/P3706610
  	P8255564	93.103	1.95e-36	Neurotoxin BmKAEP2	http://venomkb.org/P8255564
  	P0517870	96.552	3.85e-36	Toxin BmKIT3	http://venomkb.org/P0517870
- 	P5127212	91.379	4.07e-36	Beta-insect depressant toxin BmKITb	http://venomkb.org/P5127212
- 	P1255792	93.103	5.41e-36	Toxin BmKAEP	http://venomkb.org/P1255792
- 	P1446795	89.655	1.39e-35	Depressant scorpion toxin BmKIM	http://venomkb.org/P1446795
- 	P0314897	89.655	1.70e-35	Anti-neuroexcitation peptide 3	http://venomkb.org/P0314897
- 	P7736827	89.474	1.07e-34	Beta-insect depressant toxin LqhIT2	http://venomkb.org/P7736827
- 	P1990136	89.474	1.31e-34	Insect toxin 2-53	http://venomkb.org/P1990136
- 	P6179056	87.931	1.36e-33	Beta-insect depressant toxin BmKIT4	http://venomkb.org/P6179056
- 	P4338962	88.889	2.77e-33	Beta-insect depressant toxin LqqIT2	http://venomkb.org/P4338962
- 	P7331272	90.741	1.96e-32	Beta-insect depressant toxin BotIT4	http://venomkb.org/P7331272
- 	P2906605	90.741	1.96e-32	Beta-insect depressant toxin BaIT2	http://venomkb.org/P2906605
- 	P2923788	90.741	2.02e-32	Beta-insect depressant toxin BotIT5	http://venomkb.org/P2923788
- 	P1998607	86.792	3.31e-30	Beta-insect depressant toxin BmKIT2	http://venomkb.org/P1998607
 NTX41958	P4943114	98.276	7.48e-38	Toxin BmKITc	http://venomkb.org/P4943114
  	P7331272	80.000	8.20e-28	Beta-insect depressant toxin BotIT4	http://venomkb.org/P7331272
  	P2906605	80.000	8.20e-28	Beta-insect depressant toxin BaIT2	http://venomkb.org/P2906605
@@ -49,53 +19,27 @@ NTX41959	P0314897	96.552	6.78e-38	Anti-neuroexcitation peptide 3	http://venomkb.
  	P8255564	96.552	1.78e-37	Neurotoxin BmKAEP2	http://venomkb.org/P8255564
  	P5127212	94.828	3.68e-37	Beta-insect depressant toxin BmKITb	http://venomkb.org/P5127212
  	P6179056	94.828	6.11e-36	Beta-insect depressant toxin BmKIT4	http://venomkb.org/P6179056
- 	P2415271	89.655	2.90e-35	Beta-insect depressant toxin BmKITa	http://venomkb.org/P2415271
- 	P3077021	89.655	3.70e-35	Anti-neuroexcitation peptide 2	http://venomkb.org/P3077021
- 	P3706610	91.379	8.33e-35	Depressant insect toxin BmK ITa1	http://venomkb.org/P3706610
- 	P0517870	89.655	7.59e-34	Toxin BmKIT3	http://venomkb.org/P0517870
- 	P1255792	86.207	1.56e-33	Toxin BmKAEP	http://venomkb.org/P1255792
- 	P7736827	85.965	5.57e-33	Beta-insect depressant toxin LqhIT2	http://venomkb.org/P7736827
- 	P1990136	85.965	6.87e-33	Insect toxin 2-53	http://venomkb.org/P1990136
- 	P4338962	87.037	8.23e-32	Beta-insect depressant toxin LqqIT2	http://venomkb.org/P4338962
- 	P7331272	85.455	1.01e-30	Beta-insect depressant toxin BotIT4	http://venomkb.org/P7331272
- 	P2906605	85.455	1.01e-30	Beta-insect depressant toxin BaIT2	http://venomkb.org/P2906605
- 	P2923788	85.455	1.08e-30	Beta-insect depressant toxin BotIT5	http://venomkb.org/P2923788
 NTX49728	P4787611	100.000	4.28e-34	Alpha-like toxin BmK-M1	http://venomkb.org/P4787611
  	P4952465	97.959	5.40e-33	Toxin BmKaTx16	http://venomkb.org/P4952465
  	P1496516	93.750	4.33e-31	Neurotoxin BmK-II	http://venomkb.org/P1496516
  	P3686529	95.833	4.43e-31	Alpha-like toxin BmK-M2	http://venomkb.org/P3686529
  	P6350894	85.417	8.96e-29	Alpha-like toxin Bom4	http://venomkb.org/P6350894
- 	P8829747	83.333	4.40e-28	Alpha-toxin Bot1	http://venomkb.org/P8829747
- 	P5766901	83.333	7.72e-28	Alpha-insect toxin LqhaIT	http://venomkb.org/P5766901
- 	P8464485	85.106	1.40e-27	Alpha-insect toxin Lqq3	http://venomkb.org/P8464485
- 	P0604575	80.851	2.76e-27	Alpha-insect toxin BotIT1	http://venomkb.org/P0604575
- 	P6523249	81.633	1.34e-26	Neurotoxin BmK-M11	http://venomkb.org/P6523249
- 	P8137275	84.783	2.14e-26	Toxin BmKaTx10	http://venomkb.org/P8137275
- 	P7820336	80.851	2.50e-26	Makatoxin-3	http://venomkb.org/P7820336
- 	P2116869	82.609	2.67e-25	Alpha-like toxin BmK-M7	http://venomkb.org/P2116869
- 	P5501774	81.818	2.78e-24	Neurotoxin BmK-M10	http://venomkb.org/P5501774
 NTX83486	P3902032	100.000	1.30e-90	Venom peptide MmKTx1	http://venomkb.org/P3902032
 NTX83904	P7310876	84.783	2.68e-23	Toxin BmKaIT1	http://venomkb.org/P7310876
  	P7984981	88.571	9.80e-19	Toxin BmKaTx17	http://venomkb.org/P7984981
  	P3593548	88.889	2.63e-13	Neurotoxin BmK AGP-SYPU1	http://venomkb.org/P3593548
  	P3727578	83.333	4.49e-10	Toxin Boma6d	http://venomkb.org/P3727578
  	P3214126	81.818	2.43e-09	Neurotoxin 5	http://venomkb.org/P3214126
- 	P8645919	82.353	4.23e-06	Alpha-like toxin Bom3	http://venomkb.org/P8645919
- 	P9660136	81.250	9.86e-06	Neurotoxin Os3	http://venomkb.org/P9660136
 NTX83905	P7820336	95.833	8.05e-31	Makatoxin-3	http://venomkb.org/P7820336
  	P2003384	87.500	5.15e-28	Alpha-toxin BmalphaTx47	http://venomkb.org/P2003384
  	P8379826	83.333	2.19e-26	Makatoxin-2	http://venomkb.org/P8379826
  	P4952465	85.417	1.30e-24	Toxin BmKaTx16	http://venomkb.org/P4952465
  	P4787611	85.417	1.39e-24	Alpha-like toxin BmK-M1	http://venomkb.org/P4787611
- 	P6523249	81.250	9.66e-23	Neurotoxin BmK-M11	http://venomkb.org/P6523249
- 	P8147764	89.655	4.19e-15	Makatoxin-1	http://venomkb.org/P8147764
 NTX85997	P6327864	100.000	2.35e-38	Potassium channel toxin alpha-KTx 15.2	http://venomkb.org/P6327864
  	P0728663	93.220	4.43e-35	Potassium channel toxin alpha-KTx 15.5	http://venomkb.org/P0728663
  	P2450445	91.525	7.41e-35	Potassium channel toxin alpha-KTx 15.4	http://venomkb.org/P2450445
  	P6545893	91.379	1.44e-33	Potassium channel toxin alpha-KTx 15.8	http://venomkb.org/P6545893
  	P5030120	88.136	7.53e-32	Potassium channel toxin alpha-KTx 15.7	http://venomkb.org/P5030120
- 	P0463529	91.892	2.85e-20	Potassium channel toxin alpha-KTx 15.3	http://venomkb.org/P0463529
- 	P6781182	89.189	3.62e-19	Potassium channel toxin alpha-KTx 15.1	http://venomkb.org/P6781182
 NTX134676	P4376039	92.500	3.11e-22	Venom antimicrobial peptide-9	http://venomkb.org/P4376039
 NTX178644	P7095662	100.000	2.44e-17	Potassium channel toxin alpha-KTx 19.1	http://venomkb.org/P7095662
 NTX262119	P7736827	83.529	8.95e-49	Beta-insect depressant toxin LqhIT2	http://venomkb.org/P7736827
@@ -120,7 +64,6 @@ NTX416183	P3845530	100.000	5.74e-21	Potassium channel toxin alpha-KTx 14.3	http:
  	P7007476	91.429	3.45e-19	Potassium channel toxin alpha-KTx 14.1	http://venomkb.org/P7007476
  	P2547232	91.429	3.64e-19	Potassium channel toxin alpha-KTx 14.2	http://venomkb.org/P2547232
  	P3814049	88.571	1.15e-18	Potassium channel toxin alpha-KTx 14.5	http://venomkb.org/P3814049
- 	P9312899	88.571	1.77e-18	Potassium channel toxin alpha-KTx 14.4	http://venomkb.org/P9312899
 NTX423614	P4952465	86.364	1.48e-09	Toxin BmKaTx16	http://venomkb.org/P4952465
  	P4787611	86.364	1.53e-09	Alpha-like toxin BmK-M1	http://venomkb.org/P4787611
  	P4052769	81.818	1.84e-08	Neurotoxin BmK-M9	http://venomkb.org/P4052769
@@ -134,7 +77,6 @@ NTX444153	P0774360	100.000	1.24e-28	Potassium channel toxin BmTXK-beta-2	http://
  	P5240294	86.667	4.88e-25	Potassium channel toxin MeuTXK-beta-2	http://venomkb.org/P5240294
  	P8357807	93.333	6.14e-25	Potassium channel toxin AaTXK-beta	http://venomkb.org/P8357807
  	P3133404	86.667	6.21e-25	Potassium channel toxin MeuTXK-beta-1	http://venomkb.org/P3133404
- 	P7538308	93.478	3.94e-22	Potassium channel toxin BuTXK-beta	http://venomkb.org/P7538308
 NTX512262	P9897492	97.727	1.59e-29	BmKBT-like peptide	http://venomkb.org/P9897492
  	P0420222	88.372	1.55e-25	Toxin BmKBT	http://venomkb.org/P0420222
 NTX596227	P1446795	94.444	7.32e-20	Depressant scorpion toxin BmKIM	http://venomkb.org/P1446795
@@ -142,49 +84,16 @@ NTX596227	P1446795	94.444	7.32e-20	Depressant scorpion toxin BmKIM	http://venomk
  	P5127212	97.222	1.63e-19	Beta-insect depressant toxin BmKITb	http://venomkb.org/P5127212
  	P8255564	97.222	1.65e-19	Neurotoxin BmKAEP2	http://venomkb.org/P8255564
  	P2415271	94.444	4.98e-19	Beta-insect depressant toxin BmKITa	http://venomkb.org/P2415271
- 	P3706610	94.444	5.20e-19	Depressant insect toxin BmK ITa1	http://venomkb.org/P3706610
- 	P4943114	94.444	5.87e-19	Toxin BmKITc	http://venomkb.org/P4943114
- 	P3077021	94.444	2.26e-18	Anti-neuroexcitation peptide 2	http://venomkb.org/P3077021
- 	P0314897	91.667	4.31e-18	Anti-neuroexcitation peptide 3	http://venomkb.org/P0314897
- 	P3097067	80.556	9.50e-16	Beta-insect depressant toxin Lqh-dprIT3h	http://venomkb.org/P3097067
- 	P2095653	80.556	9.61e-16	Beta-insect depressant toxin Lqh-dprIT3c	http://venomkb.org/P2095653
- 	P9899718	80.556	1.06e-15	Beta-insect depressant toxin Lqh-dprIT3g	http://venomkb.org/P9899718
- 	P9155239	80.556	1.06e-15	Beta-insect depressant toxin Lqh-dprIT3d	http://venomkb.org/P9155239
- 	P6582260	80.556	1.10e-15	Beta-insect depressant toxin Lqh-dprIT3e	http://venomkb.org/P6582260
- 	P5908703	80.556	1.12e-15	Beta-insect depressant toxin Lqh-dprIT3a	http://venomkb.org/P5908703
- 	P6165443	80.556	1.18e-15	Beta-insect depressant toxin Lqh-dprIT3f	http://venomkb.org/P6165443
- 	P4035384	80.556	1.20e-15	Beta-insect depressant toxin Lqh-dprIT3b	http://venomkb.org/P4035384
- 	P0517870	100.000	3.77e-06	Toxin BmKIT3	http://venomkb.org/P0517870
- 	P6179056	93.333	7.34e-06	Beta-insect depressant toxin BmKIT4	http://venomkb.org/P6179056
 NTX602037	P2003384	90.909	1.51e-26	Alpha-toxin BmalphaTx47	http://venomkb.org/P2003384
  	P8379826	86.364	1.84e-25	Makatoxin-2	http://venomkb.org/P8379826
  	P8147764	90.476	1.14e-24	Makatoxin-1	http://venomkb.org/P8147764
  	P4052769	85.714	1.35e-24	Neurotoxin BmK-M9	http://venomkb.org/P4052769
  	P8173957	85.714	3.70e-24	Toxin BmKaTx13	http://venomkb.org/P8173957
- 	P7820336	84.091	4.29e-24	Makatoxin-3	http://venomkb.org/P7820336
- 	P6523249	83.333	8.16e-24	Neurotoxin BmK-M11	http://venomkb.org/P6523249
- 	P5867235	85.714	8.54e-24	Alpha-like toxin BmK-M4	http://venomkb.org/P5867235
- 	P5501774	80.952	1.65e-23	Neurotoxin BmK-M10	http://venomkb.org/P5501774
- 	P9947779	81.395	6.63e-22	Neurotoxin BmK-M3	http://venomkb.org/P9947779
- 	P8294155	80.952	1.94e-21	Toxin Lqh4	http://venomkb.org/P8294155
- 	P0753913	80.952	2.82e-21	Alpha-toxin Lqq4	http://venomkb.org/P0753913
- 	P5793436	80.952	3.80e-21	Alpha-toxin OD1	http://venomkb.org/P5793436
 NTX602038	P8379826	90.909	2.73e-27	Makatoxin-2	http://venomkb.org/P8379826
  	P7820336	88.636	6.94e-26	Makatoxin-3	http://venomkb.org/P7820336
  	P4052769	88.095	2.87e-25	Neurotoxin BmK-M9	http://venomkb.org/P4052769
  	P2003384	86.364	3.12e-25	Alpha-toxin BmalphaTx47	http://venomkb.org/P2003384
  	P8173957	88.095	7.80e-25	Toxin BmKaTx13	http://venomkb.org/P8173957
- 	P6523249	85.714	1.43e-24	Neurotoxin BmK-M11	http://venomkb.org/P6523249
- 	P5867235	88.095	2.44e-24	Alpha-like toxin BmK-M4	http://venomkb.org/P5867235
- 	P5501774	83.333	2.72e-24	Neurotoxin BmK-M10	http://venomkb.org/P5501774
- 	P8147764	85.714	2.79e-23	Makatoxin-1	http://venomkb.org/P8147764
- 	P3955655	81.818	3.06e-23	Alpha-insect toxin BjaIT	http://venomkb.org/P3955655
- 	P2481189	81.818	1.43e-22	Alpha-toxin Bu1	http://venomkb.org/P2481189
- 	P8294155	83.333	3.14e-22	Toxin Lqh4	http://venomkb.org/P8294155
- 	P0753913	83.333	4.32e-22	Alpha-toxin Lqq4	http://venomkb.org/P0753913
- 	P5793436	83.333	6.41e-22	Alpha-toxin OD1	http://venomkb.org/P5793436
- 	P9947779	81.395	1.74e-21	Neurotoxin BmK-M3	http://venomkb.org/P9947779
- 	P4215359	80.952	5.70e-21	Alpha-toxin Bs-Tx28	http://venomkb.org/P4215359
 NTX627879	P0779853	100.000	2.66e-45	Toxin BmCa-1	http://venomkb.org/P0779853
  	P2897787	93.750	1.37e-43	Neurotoxin lambda-MeuTx	http://venomkb.org/P2897787
  	P7082344	92.188	1.38e-42	Putative calcium channel toxin Tx758	http://venomkb.org/P7082344
