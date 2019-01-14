@@ -262,7 +262,7 @@ if(dim(d)[1]==0){
 }
 ```
 
-[Download the venom annotation file]("@{venom}")
+[Download the venom annotation file](@{venom})
 
 `r if(!params$kobas) {"\\begin{comment}"}`
 

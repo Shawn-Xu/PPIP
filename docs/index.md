@@ -160,7 +160,7 @@ $ tree ${pw}
 │       └── uniref90.fasta
 ├── out
 └── work
-`
+```
 
 ### 5.2 rnaqc
 
