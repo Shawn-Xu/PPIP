@@ -15,7 +15,8 @@ var fs = require('fs');
 casper.echo("Casper CLI passed options:");
 require("utils").dump(casper.cli.options);
 
-casper.start('http://www.cbs.dtu.dk/services/SignalP/', function() {
+//casper.start('http://www.cbs.dtu.dk/services/SignalP/', function() {  #modified in 20190226. 
+casper.start('http://www.cbs.dtu.dk/services/SignalP-4.1/', function() {
 	casper.log(this.getTitle(),"info");
 });
 
